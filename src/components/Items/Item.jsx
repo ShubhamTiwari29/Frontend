@@ -4,12 +4,12 @@ const Item = (props) => {
     return (
         <>
             <div className=' ' >
-                <div className='my-2 rounded-sm px-2 '>
+                <div className='my-2 rounded-sm px-2 text-[13px] '>
                     <img className='w-full h-auto  ' src={props.image} alt="" />
                     <div className=' '>
-                        <h2 className=' text-[15px] my-2'>{props.name}</h2>
+                        <h2 className='  my-2'>{props.name}</h2>
                         <div className='flex gap-10 items-center my-2 mx-2'>
-                            <div className='new-price'>
+                            <div className='new-price font-medium'>
                                 Rs. {props.new_price}
                             </div>
                             <div className='old-price line-through'>

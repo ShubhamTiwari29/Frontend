@@ -2,6 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
+import { FaXTwitter } from "react-icons/fa6";
+import { GrInstagram } from "react-icons/gr";
 
 const Footer = () => {
     return (
@@ -43,10 +45,10 @@ const Footer = () => {
                 <div className="footer-section social-media">
                     <h2>Follow Us</h2>
                     <div className="social-links">
-                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f"></i></a>
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></a>
-                        <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-pinterest"></i></a>
+                        <Link to="/"><FaXTwitter /></Link>
+                        <Link to="/"><GrInstagram /></Link>
+
+
                     </div>
                 </div>
 
@@ -60,7 +62,7 @@ const Footer = () => {
                 </div> */}
             </div>
 
-            <div className="footer-bottom">
+            <div className="footer-bottom text-[10px] ">
                 <p>&copy; {new Date().getFullYear()} Your Company. All rights reserved.</p>
                 <ul>
                     <li><Link to="/terms-conditions">Terms & Conditions</Link></li>

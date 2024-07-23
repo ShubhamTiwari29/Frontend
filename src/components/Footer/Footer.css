@@ -21,7 +21,7 @@
 }
 
 .footer-section h2 {
-  font-size: 18px;
+  font-size: 15px;
   font-weight:700 ;
   margin-bottom: 10px;
 }
@@ -29,7 +29,7 @@
 .footer-section p,
 .footer-section ul,
 .footer-section form {
-  font-size: 14px;
+  font-size: 10px;
   line-height: 1.5;
   padding-top: 10px;
   padding-right: 15px;

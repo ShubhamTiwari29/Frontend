@@ -19,7 +19,7 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="navbar">
+        <nav className="navbar md:text-[14px] md:px-20">
 
             {isDesktop ? <Menu /> : <Mobilemenu />}
 

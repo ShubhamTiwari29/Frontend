@@ -11,6 +11,7 @@ import MyAccount from './pages/MyAccount';
 import Cart from './pages/Cart';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
+import CustomFraming from './pages/CustomFraming';
 
 
 
@@ -21,6 +22,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
+        <Route path="/shop/custom-framing" element={<CustomFraming />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/blog" element={<Blog />} />
