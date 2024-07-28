@@ -26,7 +26,7 @@ const Menu = () => {
                         <ul className="dropdown-menu">
                             <li><Link to="/shop/landscapes">Landscapes</Link></li>
                             <li><Link to="/shop/portraits">Portraits</Link></li>
-                            <li><Link to="/shop/abstract">Abstract</Link></li>
+
                             <li><Link to="/shop/custom-framing">Custom Framing</Link></li>
                             <li><Link to="/shop/new-arrivals">New Arrivals</Link></li>
                             <li><Link to="/shop/best-sellers">Best Sellers</Link></li>

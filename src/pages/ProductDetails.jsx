@@ -4,14 +4,19 @@ import { useParams } from 'react-router-dom';
 
 const ProductDetails = () => {
     const { all_product } = useContext(ShopContext);
-    const { productId } = useParams;
-    const product = all_product.find((e) => e.id === Number(productId))
+    const { id } = useParams();
+    const product = all_product.find(item => item.id === parseInt(id))
     console.log(product);
+    if (!product) {
+        return <div>Product not found</div>;
+    }
     return (
         <div>
             this is product detail page
-            <p>{product}</p>
 
+            <p>
+                <img src={product.image} alt="" />
+            </p>
         </div>
     )
 }

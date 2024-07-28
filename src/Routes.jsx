@@ -15,6 +15,8 @@ import CustomFraming from './pages/CustomFraming';
 import Login from './pages/Login';
 import ShopContextProvider, { ShopContext } from './components/Context/ShopContext';
 import BlogContextProvider from './components/Context/BlogContext';
+import ProductDetails from './pages/ProductDetails';
+import BlogDetail from './pages/BlogDetail';
 
 
 
@@ -27,17 +29,19 @@ const AppRoutes = () => {
         <BlogContextProvider>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
+            <Route path="/shop" element={<Shop category=" " />} />
 
             <Route path="/shop/landscapes" element={<Shop title="landscape" category="men" />} />
             <Route path="/shop/portraits" element={<Shop title="Portrate" category="women" />} />
 
             <Route path="/shop/new-arrivals" element={<Shop title="New Arrival" category="kid" />} />
             <Route path="/shop/custom-framing" element={<CustomFraming />} />
+            <Route path="/shop/:id" element={<ProductDetails />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/gallery" element={<Gallery />} />
 
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:id" element={<BlogDetail />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/my-account" element={<MyAccount />} />
             <Route path="/login" element={<Login />} />
