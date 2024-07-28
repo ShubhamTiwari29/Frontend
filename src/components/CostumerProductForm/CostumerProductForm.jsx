@@ -56,23 +56,22 @@ const CostumerProductForm = ({ onSubmit }) => {
                 <form onSubmit={handleSubmit} className=" mx-auto w-full p-4 bg-white rounded-lg ">
                     <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Product Image:</label>
-                        <input
+                        <label className="block text-sm font-medium text-gray-700">Product Image:<input
                             type="file"
                             accept="image/*"
                             onChange={handleImageChange}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
-                        />
+                        /></label>
+
                         {imagePreview && (
                             <div className="mt-2">
-                                <img src={imagePreview} alt="Product Preview" className="max-w-full h-auto" />
+                                <img src={imagePreview} alt="Product Preview" className="max-w-full h-36" />
                             </div>
                         )}
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Select Frame Size:</label>
-                        <select
+                        <label className="block text-sm font-medium text-gray-700">Select Frame Size:<select
                             value={framesize}
                             onChange={(e) => setFramesize(e.target.value)}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -83,7 +82,8 @@ const CostumerProductForm = ({ onSubmit }) => {
                             <option value="Medium">Medium</option>
                             <option value="Large">Large</option>
                             <option value="Extra Large">Extra Large</option>
-                        </select>
+                        </select></label>
+
                     </div>
 
 

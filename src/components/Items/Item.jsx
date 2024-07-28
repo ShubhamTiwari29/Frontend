@@ -21,7 +21,7 @@ const Item = (props) => {
                         </div>
 
 
-                        <button className='bg-[#FEBD69] p-3 rounded-md w-full'>Add to cart</button>
+                        <button className='bg-[#FEBD69] p-3 my-2 rounded-md w-full'>Add to cart</button>
                         <button className='bg-[#FEBD69] p-3 rounded-md w-full'>Details</button>
 
                     </div>

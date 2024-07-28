@@ -37,7 +37,7 @@ import p36_img from "./product_36.png";
 
 let all_product = [
   {
-    id: 1,
+    "id": 1,
     name: "Striped Flutter Sleeve Overlap Collar Peplum Hem Blouse",
     category: "women",
     image: p1_img,
@@ -45,7 +45,7 @@ let all_product = [
     old_price: 80.5,
   },
   {
-    id: 2,
+    "id": 2,
     name: "Striped Flutter Sleeve Overlap Collar Peplum Hem Blouse",
     category: "women",
     image: p2_img,

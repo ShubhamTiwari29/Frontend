@@ -10,10 +10,7 @@ import ProductDetails from '../components/ProductDetails/ProductDetails';
 
 const Home = () => {
   // const [product, setProduct] = useState(null);
-  const alertmesage = () => {
-    console.log("button clicked");
-    alert()
-  };
+
 
 
   return (
@@ -23,7 +20,7 @@ const Home = () => {
           <h1 className='text-[30px] '>WE FRAME EMOTIONS ONLINE</h1>
           <p className='text-gray-400 py-4'>India's Online Photo Framing Store</p>
           <button className=' text-black  p-3 my-6 rounded-lg bg-[#FEBD69] '> <Link to="shop" className=" text-black hover:text-gray-800">Shop Now</Link></button>
-          <button onClick={alertmesage}> click me</button>
+
         </div>
 
 
