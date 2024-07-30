@@ -17,6 +17,7 @@ import ShopContextProvider, { ShopContext } from './components/Context/ShopConte
 import BlogContextProvider from './components/Context/BlogContext';
 import ProductDetails from './pages/ProductDetails';
 import BlogDetail from './pages/BlogDetail';
+import Payment from './pages/Payment';
 
 
 
@@ -37,6 +38,7 @@ const AppRoutes = () => {
             <Route path="/shop/new-arrivals" element={<Shop title="New Arrival" category="kid" />} />
             <Route path="/shop/custom-framing" element={<CustomFraming />} />
             <Route path="/shop/:id" element={<ProductDetails />} />
+            <Route path="/payment/:id" element={<Payment />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/gallery" element={<Gallery />} />
 

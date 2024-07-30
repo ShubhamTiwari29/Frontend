@@ -1,12 +1,24 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import BlogList from '../components/Blog/BlogList'
 import { BlogContext } from '../components/Context/BlogContext'
+import Pagination from '../components/Pagination/Pagination'
 
 const Blog = () => {
+
+
+    const [pageNo, setPageNo] = useState(1);
+    const [dataPerPage] = useState(5);
+
+
     const { BlogData } = useContext(BlogContext);
 
 
 
+
+
+
+    const firstData = (pageNo - 1) * dataPerPage
+    const lastData = (pageNo * dataPerPage)
 
     return (
         <div className='m-4 xl:container xl:mx-auto md:mx-14'>
@@ -19,10 +31,17 @@ const Blog = () => {
                 Hello and welcome to our blog! We are thrilled to have you join us in exploring the exciting world of home decor and thoughtful gifting. At [Your Organization's Name], our passion lies in transforming spaces and creating meaningful connections through the power of pictures. Whether you're here to find inspiration for your living room or the perfect photo gift for a loved one, we're here to guide you every step of the way. Dive in, get inspired, and let's make every picture count!
 
                 Happy decorating and gifting!</p>
-            {BlogData.map((item, i) => {
+            {BlogData.slice(firstData, lastData).map((item, i) => {
                 return (<BlogList key={i} id={item.id} title={item.title} description={item.description} />)
             })}
 
+            <Pagination
+                itemsPerPage={dataPerPage}
+                totalItems={BlogData.length}
+                paginate={setPageNo}
+                firstData={firstData + 1}
+                lastData={lastData}
+            />
 
         </div>
     )
