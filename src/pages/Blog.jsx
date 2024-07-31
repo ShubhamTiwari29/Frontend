@@ -9,11 +9,22 @@ const Blog = () => {
     const [pageNo, setPageNo] = useState(1);
     const [dataPerPage] = useState(5);
 
-
+    // const currentPage = (pageNumber) => {
+    //     setPageNo(pageNumber);
+    // };
     const { BlogData } = useContext(BlogContext);
 
+    const increasePage = () => {
+        if (pageNo < Math.ceil(BlogData.length / dataPerPage)) {
+            setPageNo(prevPageNo => prevPageNo + 1)
+        }
+    }
 
-
+    const decreasePage = () => {
+        if (pageNo > 1) {
+            setPageNo(prevPageNo => prevPageNo - 1)
+        }
+    }
 
 
 
@@ -39,8 +50,11 @@ const Blog = () => {
                 itemsPerPage={dataPerPage}
                 totalItems={BlogData.length}
                 paginate={setPageNo}
+                currentPage={pageNo}
                 firstData={firstData + 1}
                 lastData={lastData}
+                increasePageNo={increasePage}
+                decreasePageNo={decreasePage}
             />
 
         </div>
