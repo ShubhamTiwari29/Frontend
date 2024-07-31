@@ -5,13 +5,13 @@ const Blog = [
         "id": 1,
         "title": "Motivational Art for the Home Office",
         "description": "Transform your home office with motivational art that inspires productivity and creativity. Choose pieces that resonate with your goals and aspirations. Bold typography and vibrant colors can energize your space, while serene landscapes and quotes can provide calm and focus. The right artwork can turn your workspace into a hub of inspiration, keeping you motivated throughout your workday. Make your home office a reflection of your ambition and drive with carefully selected motivational art.",
-        "tags": ["motivation", "home office", "art", "productivity", "creativity"]
+        "tags": ["home office", "art", "productivity", "creativity"]
     },
     {
         "id": 2,
         "title": "Inspiring Art for the Living Room",
         "description": "Elevate your living room with inspiring art that sparks conversation and lifts spirits. Choose artwork that reflects your personal taste and complements your decor. Abstract pieces with vibrant colors can add energy, while serene landscapes can create a peaceful ambiance. Incorporating motivational quotes into your living room art can provide daily encouragement and positivity. Create a space that inspires relaxation and happiness with the right selection of motivational art.",
-        "tags": ["motivation", "living room", "art", "inspiration", "decor"]
+        "tags": [, "living room", "art", "inspiration", "decor"]
     },
     {
         "id": 3,
