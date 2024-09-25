@@ -1,61 +1,81 @@
-// src/pages/Home.js
-import React, { useState } from 'react';
+
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Item from '../components/Items/Item';
-import data from '../assets/Frontend_Assets/data'
+import data from '../assets/Frontend_Assets/data';
 import CostumerProductForm from '../components/CostumerProductForm/CostumerProductForm';
-import ProductDetails from '../components/ProductDetails/ProductDetails';
-// import background from '../assets/Images/Background.jpg'
+import img1 from '../assets/Images/Featured1.jpg';
+import Background from '../assets/Images/Home.jpg'
 
 const Home = () => {
-  // const [product, setProduct] = useState(null);
-
-
-
   return (
     <>
-      <div className=' flex items-center h-[400px]  bg-gradient-to-b from-[#92e7e7] to-stone-200 text-center'>
-        <div className='w-full'>
-          <h1 className='text-[30px] '>WE FRAME EMOTIONS ONLINE</h1>
-          <p className='text-gray-400 py-4'>India's Online Photo Framing Store</p>
-          <button className=' text-black  p-3 my-6 rounded-lg bg-[#FEBD69] '> <Link to="shop" className=" text-black hover:text-gray-800">Shop Now</Link></button>
-
+      {/* Hero Section */}
+      <div className='relative w-full h-screen flex items-center justify-center text-center bg-cover bg-center' style={{ backgroundImage: `url(${Background})` }}>
+        <div className='absolute inset-0 bg-black opacity-50'></div>
+        <div className='relative z-10'>
+          <h1 className='text-5xl text-white font-bold'>We Frame Emotions Online</h1>
+          <p className='text-lg text-white mt-4'>India's Online Photo Framing Store</p>
+          <Link to="shop" className='inline-block bg-[#FEBD69] text-black hover:bg-[#e5a357] px-8 py-4 rounded-full text-lg font-semibold mt-8'>
+            Shop Now
+          </Link>
         </div>
+      </div >
 
-
-
-
-      </div>
-      <div className='md:px-20'>
-
-        <h1 className='  font-semibold mt-6'> LANDSCAPE</h1>
-
-        <div className='md:grid md:grid-cols-3 md:gap-4 md:container mx-auto xl:container xl:grid-cols-4 '>
-          {data.map((item, i) => {
-            return <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price} />
-          })}
-
+      {/* Featured Categories Section */}
+      < div className='md:px-20 py-10' >
+        <h2 className='text-3xl font-semibold text-center mb-8'>Featured Categories</h2>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8'>
+          <div className='bg-white p-6 shadow-lg rounded-lg hover:shadow-xl transition duration-300'>
+            <img src={Background} alt="" />
+            <h3 className='text-xl font-semibold mb-4'>Landscape Frames</h3>
+            <Link to="/shop/landscapes" className='text-blue-500 hover:text-blue-700'>Shop Now</Link>
+          </div>
+          <div className='bg-white p-6 shadow-lg rounded-lg hover:shadow-xl transition duration-300'>
+            <img src={img1} alt="" />
+            <h3 className='text-xl font-semibold mb-4'>Portrait Frames</h3>
+            <Link to="/shop/portraits" className='text-blue-500 hover:text-blue-700'>Shop Now</Link>
+          </div>
+          <div className='bg-white p-6 shadow-lg rounded-lg hover:shadow-xl transition duration-300'>
+            <img src={img1} alt="" />
+            <h3 className='text-xl font-semibold mb-4'>Customized Photo Frames</h3>
+            <Link to="/shop/custom-framing" className='text-blue-500 hover:text-blue-700'>Customize Now</Link>
+          </div>
         </div>
-        <button ><Link to="shop" className=" text-gray-500 hover:text-black">View all</Link> </button>
-      </div>
+      </div >
 
-      <div className='md:px-20'>
-        <h1 className='  font-semibold mt-6'> PORTRAIT</h1>
-
-        <div className='md:grid md:grid-cols-3 md:gap-4 md:container mx-auto xl:container xl:grid-cols-4'>
-          {data.map((item, i) => {
-            return <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price} />
-          })}
-
+      {/* Popular Products Section */}
+      < div className='md:px-20 py-10 bg-gray-100' >
+        <h2 className='text-3xl font-semibold text-center mb-8'>Popular Products</h2>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6'>
+          {data.map((item, i) => (
+            <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price} />
+          ))}
         </div>
-        <button ><Link to="shop" className=" text-gray-500 hover:text-black">View all</Link> </button>
-      </div>
+        <div className='text-center mt-6'>
+          <Link to="shop" className="text-blue-500 hover:text-blue-700">View All Products</Link>
+        </div>
+      </div >
 
-      <div className='md:px-20'>
-        <h1 className='  font-semibold mt-6'> COSTUMIZE IMAGES</h1>
+      {/* Customer Testimonials or Highlights Section */}
+      < div className='md:px-20 py-10' >
+        <h2 className='text-3xl font-semibold text-center mb-8'>What Our Customers Say</h2>
+        <div className='flex justify-center'>
+          <div className='max-w-2xl bg-white p-6 rounded-lg shadow-lg text-center'>
+            <p className='text-gray-600 mb-4'>"Beautiful frames and excellent service! Highly recommend this store for all your framing needs."</p>
+            <p className='font-semibold text-blue-500'>- Customer Name</p>
+          </div>
+        </div>
+      </div >
+
+      {/* Customized Frames Section */}
+      < div className='md:px-20 py-10 bg-white' >
+        <h2 className='text-3xl font-semibold text-center mb-8'>Create Your Customized Photo Frame</h2>
         <CostumerProductForm />
-      </div>
+      </div >
+
+
     </>
   )
 };

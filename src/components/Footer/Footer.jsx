@@ -16,7 +16,7 @@ const Footer = () => {
                         is to provide high-quality art at affordable prices.
                     </p>
                     <p>Address: R2Q7+HJQ, Sector 6, Gomti Nagar, Lucknow, Uttar Pradesh 226010</p>
-                    <p> <span className='text-[20px]'>Phone:</span> 8354033004</p>
+                    <p> <span className='text-[20px]'>Phone:</span> 123456789</p>
                     <p>Email: info@example.com</p>
                 </div>
 

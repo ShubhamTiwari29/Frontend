@@ -21,7 +21,7 @@ const Menu = () => {
                     onMouseEnter={() => handleMouseEnter('shop')}
                     onMouseLeave={handleMouseLeave}
                 >
-                    <Link to="/shop">Shop</Link>
+                    <Link >Shop</Link>
                     {dropdown === 'shop' && (
                         <ul className="dropdown-menu">
                             <li><Link to="/shop/landscapes">Landscapes</Link></li>
@@ -29,12 +29,12 @@ const Menu = () => {
 
                             <li><Link to="/shop/custom-framing">Custom Framing</Link></li>
                             <li><Link to="/shop/new-arrivals">New Arrivals</Link></li>
-                            <li><Link to="/shop/best-sellers">Best Sellers</Link></li>
+                            {/* <li><Link to="/shop/best-sellers">Best Sellers</Link></li> */}
                         </ul>
                     )}
                 </li>
-                <li><Link to="/about-us">About Us</Link></li>
-                <li><Link to="/gallery">Gallery</Link></li>
+                {/* <li><Link to="/about-us">About Us</Link></li>
+                <li><Link to="/gallery">Gallery</Link></li> */}
                 <li><Link to="/blog">Blog</Link></li>
                 <li><Link to="/contact-us">Contact Us</Link></li>
                 <li
