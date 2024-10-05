@@ -22,6 +22,7 @@ import Payment from './pages/Payment';
 import { CartProvider } from './components/Context/CartContext';
 import VerifyOTP from './components/VerifyOTP/VerifyOTP';
 import OrderHistory from './pages/order/OrderHistory';
+import DesignerStore from './pages/designer/DesignerStore';
 
 
 
@@ -42,6 +43,7 @@ const AppRoutes = () => {
               <Route path="/shop/new-arrivals" element={<Shop title="New Arrival" category="kid" />} />
               <Route path="/shop/custom-framing" element={<CustomFraming />} />
               <Route path="/shop/:id" element={<ProductDetails />} />
+              <Route path="/designer/:id" element={<DesignerStore />} />
               <Route path="/payment/:id" element={<Payment />} />
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/gallery" element={<Gallery />} />

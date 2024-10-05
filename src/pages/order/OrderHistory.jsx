@@ -65,10 +65,11 @@ const OrderHistory = () => {
                                 <ul className="list-disc pl-5 space-y-2">
                                     {order.items.map((item, index) => (
                                         <li key={index} className="flex items-center space-x-3 border-b py-2">
+
                                             <img
                                                 src={item.productId.image || 'https://via.placeholder.com/64'}
                                                 // src={'https://via.placeholder.com/64'}
-                                                alt={item.name}
+                                                alt={item.productId.image}
                                                 className="w-16 h-16 object-cover rounded shadow"
                                             />
                                             <div className="flex-1">
