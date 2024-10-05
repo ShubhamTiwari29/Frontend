@@ -2,6 +2,10 @@
 logs
 *.log
 .env
+<<<<<<< HEAD
+=======
+.env.local
+>>>>>>> b50d34895f5f056a9232a6570907b1ac4e6e3069
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
