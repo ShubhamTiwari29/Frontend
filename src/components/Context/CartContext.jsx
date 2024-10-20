@@ -1,45 +1,27 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState(() => {
-        // Initialize state with cart items from localStorage
         const savedCartItems = JSON.parse(localStorage.getItem('cartItems'));
-        return savedCartItems || []; // Return saved items or an empty array
+        return savedCartItems || [];
     });
 
-    // Load cart items from localStorage when the component mounts
     useEffect(() => {
         const savedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        console.log('Checking local storage.....', savedCartItems);
         setCartItems(savedCartItems);
     }, []);
 
-    // Save cart items to localStorage whenever they change
     useEffect(() => {
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
-        console.log('Your data added:', cartItems);
     }, [cartItems]);
 
-    const cartData = cartItems.map(item => ({
-        productId: item.id,
-        name: item.name,
-        quantity: item.quantity,
-        price: item.new_price
-    }));
-
-
-    console.log("this is cart item", cartItems);
-    console.log("this is cart data", cartData);
-
-
     const addToCart = (item) => {
-        console.log("data of frame send ", item);
+        console.log("this is adding cart item data", item);
 
         setCartItems(prevItems => {
             const itemExists = prevItems.find(cartItem =>
@@ -84,20 +66,17 @@ export const CartProvider = ({ children }) => {
             )
         );
     };
-    const navigate = useNavigate()
-    const handleConfirmOrder = () => {
-        // Implement order confirmation logic
 
-        console.log('Order confirmed');
-        navigate('/fill-address');
+    const getTotalPrice = () => {
+        return cartItems.reduce((total, item) => {
+            return total + (item.price * item.quantity);
+        }, 0);
     };
-
 
     const clearCart = () => {
         setCartItems([]);
-        localStorage.removeItem('cartItems'); // Clear cart items from localStorage if needed
+        localStorage.removeItem('cartItems');
     };
-
 
     const value = {
         cartItems,
@@ -105,7 +84,7 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         decreaseQuantity,
         increaseQuantity,
-        handleConfirmOrder,
+        getTotalPrice, // Include the total price function
         clearCart
     };
 

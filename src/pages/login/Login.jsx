@@ -32,7 +32,7 @@ const Login = () => {
                 const token = data.token;
                 localStorage.setItem('token', token);
 
-                navigate("/cart");
+                // navigate("/cart");
             } else {
                 const errorData = await response.json();
                 setMessage(errorData.message || 'An error occurred');

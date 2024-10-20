@@ -1,83 +1,129 @@
-
 import React from 'react';
-import { Link } from 'react-router-dom';
-
-import Item from '../components/Items/Item';
-import data from '../assets/Frontend_Assets/data';
-import CostumerProductForm from '../components/CostumerProductForm/CostumerProductForm';
-import img1 from '../assets/Images/Featured1.jpg';
-import Background from '../assets/Images/Home.jpg'
+import img1 from '../assets/Images/Background.jpg';
+import img2 from '../assets/Images/Featured1.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  // Sample image collection and testimonials
+  const imageCollection = [
+    { id: 1, title: 'Sunset', price: '$29.99', image: '/images/sunset.jpg' },
+    { id: 2, title: 'Mountain', price: '$39.99', image: '/images/mountain.jpg' },
+    { id: 3, title: 'Ocean View', price: '$34.99', image: '/images/ocean.jpg' },
+    // Add more images as needed
+  ];
+
+  const testimonials = [
+    {
+      name: 'John Doe',
+      review: 'The frame I ordered for my picture was perfect! Highly recommend.',
+      image: '/images/customer1.jpg',
+    },
+    {
+      name: 'Jane Smith',
+      review: 'Fantastic service and quality. The collection of images is stunning!',
+      image: '/images/customer2.jpg',
+    },
+    // Add more testimonials as needed
+  ];
+  const navigate = useNavigate()
+  const handleCoustmerUplaoding = () => {
+    navigate('/shop/custom-framing')
+  }
+
   return (
-    <>
-      {/* Hero Section */}
-      <div className='relative w-full h-screen flex items-center justify-center text-center bg-cover bg-center' style={{ backgroundImage: `url(${Background})` }}>
-        <div className='absolute inset-0 bg-black opacity-50'></div>
-        <div className='relative z-10'>
-          <h1 className='text-5xl text-white font-bold'>We Frame Emotions Online</h1>
-          <p className='text-lg text-white mt-4'>India's Online Photo Framing Store</p>
-          <Link to="shop" className='inline-block bg-[#FEBD69] text-black hover:bg-[#e5a357] px-8 py-4 rounded-full text-lg font-semibold mt-8'>
+    <div>
+      {/* Navbar */}
+      <nav className="navbar bg-teal-500 p-4 flex justify-between items-center">
+        <div className="logo text-white text-2xl font-bold">FrameShop</div>
+        <ul className="flex space-x-6 text-white">
+          <li className="hover:underline cursor-pointer">Custom Frames</li>
+          <li className="hover:underline cursor-pointer">Image Collection</li>
+          <li className="hover:underline cursor-pointer">Gifts</li>
+          <li className="hover:underline cursor-pointer">Promotions</li>
+        </ul>
+        <div className="flex items-center space-x-4">
+          <input type="text" placeholder="Search..." className="p-2 rounded" />
+          <button className="bg-yellow-500 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded">
             Shop Now
-          </Link>
+          </button>
         </div>
-      </div >
+      </nav>
 
-      {/* Featured Categories Section */}
-      < div className='md:px-20 py-10' >
-        <h2 className='text-3xl font-semibold text-center mb-8'>Featured Categories</h2>
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8'>
-          <div className='bg-white p-6 shadow-lg rounded-lg hover:shadow-xl transition duration-300'>
-            <img src={Background} alt="" />
-            <h3 className='text-xl font-semibold mb-4'>Landscape Frames</h3>
-            <Link to="/shop/landscapes" className='text-blue-500 hover:text-blue-700'>Shop Now</Link>
-          </div>
-          <div className='bg-white p-6 shadow-lg rounded-lg hover:shadow-xl transition duration-300'>
-            <img src={img1} alt="" />
-            <h3 className='text-xl font-semibold mb-4'>Portrait Frames</h3>
-            <Link to="/shop/portraits" className='text-blue-500 hover:text-blue-700'>Shop Now</Link>
-          </div>
-          <div className='bg-white p-6 shadow-lg rounded-lg hover:shadow-xl transition duration-300'>
-            <img src={img1} alt="" />
-            <h3 className='text-xl font-semibold mb-4'>Customized Photo Frames</h3>
-            <Link to="/shop/custom-framing" className='text-blue-500 hover:text-blue-700'>Customize Now</Link>
+      {/* Hero Section */}
+      <section className="relative bg-cover bg-center h-[60vh]" style={{ backgroundImage: `url(${img1})` }}>
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center">
+          <h1 className="text-white text-5xl font-bold">Custom Frames Made Just for You!</h1>
+          <div className="mt-6 flex space-x-4">
+            <button className="bg-yellow-500 hover:bg-teal-500 text-white font-bold py-3 px-6 rounded"
+              onClick={handleCoustmerUplaoding}
+            >
+              Upload Your Picture
+            </button>
+            <button className="bg-yellow-500 hover:bg-teal-500 text-white font-bold py-3 px-6 rounded">
+              Explore Image Collection
+            </button>
           </div>
         </div>
-      </div >
+      </section>
 
-      {/* Popular Products Section */}
-      < div className='md:px-20 py-10 bg-gray-100' >
-        <h2 className='text-3xl font-semibold text-center mb-8'>Popular Products</h2>
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6'>
-          {data.map((item, i) => (
-            <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price} />
+      {/* Image Collection Section */}
+      <section className="py-8 bg-white">
+        <h2 className="text-center text-3xl font-bold mb-6">Our Image Collection</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+          {imageCollection.map((image) => (
+            <div key={image.id} className="bg-gray-100 p-4 rounded shadow-md hover:shadow-lg transition-all">
+              <img src={img2} alt={image.title} className="w-full h-48 object-cover rounded" />
+              <h3 className="text-xl font-bold mt-4">{image.title}</h3>
+              <p className="text-lg text-gray-700">{image.price}</p>
+              <button className="mt-2 bg-yellow-500 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded">
+                Buy & Frame
+              </button>
+            </div>
           ))}
         </div>
-        <div className='text-center mt-6'>
-          <Link to="shop" className="text-blue-500 hover:text-blue-700">View All Products</Link>
-        </div>
-      </div >
+      </section>
 
-      {/* Customer Testimonials or Highlights Section */}
-      < div className='md:px-20 py-10' >
-        <h2 className='text-3xl font-semibold text-center mb-8'>What Our Customers Say</h2>
-        <div className='flex justify-center'>
-          <div className='max-w-2xl bg-white p-6 rounded-lg shadow-lg text-center'>
-            <p className='text-gray-600 mb-4'>"Beautiful frames and excellent service! Highly recommend this store for all your framing needs."</p>
-            <p className='font-semibold text-blue-500'>- Customer Name</p>
+      {/* Testimonials Section */}
+      <section className="py-8 bg-gray-50">
+        <h2 className="text-center text-3xl font-bold mb-6">What Our Customers Say</h2>
+        <div className="flex justify-center space-x-6">
+          {testimonials.map((testimonial, index) => (
+            <div key={index} className="bg-white p-4 rounded shadow-md text-center max-w-xs">
+              <img src={testimonial.image} alt={testimonial.name} className="w-16 h-16 rounded-full mx-auto mb-4" />
+              <p className="italic">"{testimonial.review}"</p>
+              <h4 className="font-bold mt-2">{testimonial.name}</h4>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer Section */}
+      <footer className="bg-gray-100 py-8">
+        <div className="container mx-auto flex justify-between">
+          <div className="space-y-4">
+            <h4 className="font-bold">Customer Service</h4>
+            <ul className="space-y-2">
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Shipping & Returns</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div className="text-center">
+            <h4 className="font-bold">Connect with Us</h4>
+            <div className="flex space-x-4 justify-center mt-4">
+              <a href="#"><img src="/icon-instagram.svg" alt="Instagram" /></a>
+              <a href="#"><img src="/icon-facebook.svg" alt="Facebook" /></a>
+              <a href="#"><img src="/icon-pinterest.svg" alt="Pinterest" /></a>
+            </div>
+            <div className="mt-4">
+              <input type="email" placeholder="Your email" className="p-2 rounded" />
+              <button className="bg-teal-500 text-white p-2 rounded">Sign Up</button>
+            </div>
           </div>
         </div>
-      </div >
-
-      {/* Customized Frames Section */}
-      < div className='md:px-20 py-10 bg-white' >
-        <h2 className='text-3xl font-semibold text-center mb-8'>Create Your Customized Photo Frame</h2>
-        <CostumerProductForm />
-      </div >
-
-
-    </>
-  )
+      </footer>
+    </div>
+  );
 };
 
 export default Home;

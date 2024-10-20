@@ -11,51 +11,46 @@ const Menu = () => {
     const handleMouseLeave = () => {
         setDropdown(null);
     };
+
     return (
-
         <div>
-            <ul className="navbar-menu ">
-
-                <li><Link to="/">Home</Link></li>
-                <li
-                    onMouseEnter={() => handleMouseEnter('shop')}
-                    onMouseLeave={handleMouseLeave}
-                >
-                    <Link >Shop</Link>
-                    {dropdown === 'shop' && (
-                        <ul className="dropdown-menu">
-                            <li><Link to="/shop/landscapes">Landscapes</Link></li>
-                            <li><Link to="/shop/portraits">Portraits</Link></li>
-
-                            <li><Link to="/shop/custom-framing">Custom Framing</Link></li>
-                            <li><Link to="/shop/new-arrivals">New Arrivals</Link></li>
-                            {/* <li><Link to="/shop/best-sellers">Best Sellers</Link></li> */}
-                        </ul>
-                    )}
+            <ul className="navbar-menu flex space-x-6 text-white">
+                <li className="hover:underline cursor-pointer">
+                    <Link to="/">Home</Link>
                 </li>
-                {/* <li><Link to="/about-us">About Us</Link></li>
-                <li><Link to="/gallery">Gallery</Link></li> */}
-                <li><Link to="/blog">Blog</Link></li>
-                <li><Link to="/contact-us">Contact Us</Link></li>
+                <li className="hover:underline cursor-pointer">
+                    <Link to="/custom-framing">Custom Framing</Link>
+                </li>
+                <li className="hover:underline cursor-pointer">
+                    <Link to="/art-gallery">Art Gallery</Link>
+                </li>
+                <li className="hover:underline cursor-pointer">
+                    <Link to="/blog">Blog</Link>
+                </li>
+                <li className="hover:underline cursor-pointer">
+                    <Link to="/contact-us">Contact Us</Link>
+                </li>
                 <li
                     onMouseEnter={() => handleMouseEnter('myAccount')}
                     onMouseLeave={handleMouseLeave}
+                    className="relative"
                 >
-                    <Link to="/my-account">My Account</Link>
+                    <Link to="/my-account" className="hover:underline cursor-pointer">My Account</Link>
                     {dropdown === 'myAccount' && (
-                        <ul className="dropdown-menu">
-                            <li><Link to="/login">Login/Sign Up</Link></li>
-                            <li><Link to="/order-history">Order History</Link></li>
-                            <li><Link to="/wishlist">Wishlist</Link></li>
-                            <li><Link to="/profile-settings">Profile Settings</Link></li>
+                        <ul className="dropdown-menu absolute left-0 mt-2 bg-white text-black rounded shadow-lg">
+                            <li className="hover:bg-gray-200"><Link to="/login">Login/Sign Up</Link></li>
+                            <li className="hover:bg-gray-200"><Link to="/order-history">Order History</Link></li>
+                            <li className="hover:bg-gray-200"><Link to="/wishlist">Wishlist</Link></li>
+                            <li className="hover:bg-gray-200"><Link to="/profile-settings">Profile Settings</Link></li>
                         </ul>
                     )}
                 </li>
-                <li><Link to="/cart">Cart</Link></li>
-
+                <li className="hover:underline cursor-pointer">
+                    <Link to="/cart">Cart</Link>
+                </li>
             </ul>
         </div>
-    )
-}
+    );
+};
 
-export default Menu
+export default Menu;

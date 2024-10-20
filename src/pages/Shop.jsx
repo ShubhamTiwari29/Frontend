@@ -1,88 +1,124 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Masonry from 'react-masonry-css';
 import { ShopContext } from '../components/Context/ShopContext';
-import { FaShoppingCart } from 'react-icons/fa';
-import { AiOutlineSearch, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
+import { AiOutlineSearch } from 'react-icons/ai';
 import MassonaryComponent from '../components/masonary/Massonary';
 import Loading from '../components/loader/Loading';
 
 const Shop = (props) => {
-    const { products, loading, error } = useContext(ShopContext); // Get products, loading, and error from context
+    const { products, loading, error } = useContext(ShopContext);
 
-    const [cart, setCart] = useState([]);
-    const [cartMessage, setCartMessage] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [selectedOrientation, setSelectedOrientation] = useState('');
+    const [selectedSize, setSelectedSize] = useState('');
+    const sizes = ['(8\'x12\')', '(12\'x18\')', '(18\'x24\')', '(20\'x30\')'];
 
-    const [searchQuery, setSearchQuery] = useState(''); // State for search query
-    const [filteredProducts, setFilteredProducts] = useState([]); // State for filtered products
-    const navigate = useNavigate();
-
-    // Sync filteredProducts with products context whenever products change
     useEffect(() => {
-        setFilteredProducts(products); // Set filtered products to all products initially
-    }, [products]); // Dependency on products context
+        setFilteredProducts(products);
+    }, [products]);
 
+    // Function to filter products based on search query, orientation, and size
+    const filterProducts = () => {
+        const lowerCaseQuery = searchQuery.toLowerCase();
 
+        const results = products.filter((product) => {
+            const matchesQuery = product.title.toLowerCase().includes(lowerCaseQuery) ||
+                (product.tags && product.tags.some(tag => tag.toLowerCase().includes(lowerCaseQuery)));
 
+            const matchesOrientation = selectedOrientation ? product.orientation === selectedOrientation : true;
+            const matchesSize = selectedSize ? product.size === selectedSize : true;
 
+            return matchesQuery && matchesOrientation && matchesSize;
+        });
 
+        setFilteredProducts(results);
+    };
 
-    // Function to handle search button click
+    // Handle search button click
     const handleSearch = () => {
-        const lowerCaseQuery = searchQuery.toLowerCase(); // Convert search query to lower case for case-insensitive search
-        // Filter products based on search query matching title or tags
-        const results = products.filter((product) =>
-            product.title.toLowerCase().includes(lowerCaseQuery) ||
-            (product.tags && product.tags.some(tag => tag.toLowerCase().includes(lowerCaseQuery)))
-        );
-        setFilteredProducts(results); // Update filtered products state
+        filterProducts();
+    };
+
+    // Handle key press for the search input
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    // Handle changes in filters
+    const handleOrientationChange = (e) => {
+        setSelectedOrientation(e.target.value);
+        filterProducts(); // Filter products whenever the orientation changes
+    };
+
+    const handleSizeChange = (e) => {
+        setSelectedSize(e.target.value);
+        filterProducts(); // Filter products whenever the size changes
     };
 
     if (loading) {
-        return <div><Loading /></div>; // Show loading indicator while fetching products
+        return <div><Loading /></div>;
     }
 
     if (error) {
-        return <div>Error: {error}</div>; // Show error message if there's an error
+        return <div>Error: {error}</div>;
     }
 
     return (
         <div className="container mx-auto p-6 lg:px-8 py-12">
-            {/* Header Section */}
             <header className="text-center mb-12">
                 <h1 className="text-4xl font-bold text-gray-900 mb-4">{props.title || 'Shop Framed Artworks'}</h1>
                 <p className="text-gray-600">Beautifully framed images for your home or office!</p>
             </header>
 
-            {/* Search Bar */}
-            <div className="flex justify-center mb-8">
-                <div className="relative w-full max-w-md flex">
+            {/* Search Bar and Filters */}
+            <div className="flex justify-center mb-8 space-x-4">
+                <select
+                    value={selectedOrientation}
+                    onChange={handleOrientationChange}
+                    className="border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                >
+                    <option value="">All Orientations</option>
+                    <option value="portrait">Portrait</option>
+                    <option value="landscape">Landscape</option>
+                </select>
+
+                <select
+                    value={selectedSize}
+                    onChange={handleSizeChange}
+                    className="border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                >
+                    <option value="">All Sizes</option>
+                    {sizes.map((size) => (
+                        <option key={size} value={size}>
+                            {size}
+                        </option>
+                    ))}
+                </select>
+
+                <div className="relative w-full max-w-md">
                     <input
                         type="text"
-                        value={searchQuery} // Bind input value to state
-                        onChange={(e) => setSearchQuery(e.target.value)} // Update state on input change
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyPress={handleKeyPress}
                         placeholder="Search framed images"
-                        className="w-full border border-gray-300 rounded-l-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full border border-gray-300 rounded-l-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
                     />
                     <button
-                        onClick={handleSearch} // Trigger search on button click
-                        className="bg-blue-500 text-white rounded-r-lg px-4 py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        onClick={handleSearch}
+                        className="absolute inset-y-0 right-0 bg-blue-500 text-white rounded-r-lg px-4 py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
                     >
                         <AiOutlineSearch size={24} />
                     </button>
                 </div>
             </div>
 
-            {/* Cart Message */}
-            {cartMessage && (
-                <div className="mb-4 text-green-500 text-center">
-                    {cartMessage}
-                </div>
-            )}
-
             {/* Products Collection Section */}
             <Masonry
-                breakpointCols={{ default: 4, 1100: 3, 700: 2, 500: 1 }}
+                breakpointCols={{ default: 5, 1100: 4, 700: 3, 500: 2 }}
                 className="flex animate-slide-fade -ml-4"
                 columnClassName="pl-4 bg-clip-padding"
             >

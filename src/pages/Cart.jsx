@@ -4,37 +4,36 @@ import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
     const { cartItems, removeFromCart, decreaseQuantity, increaseQuantity, clearCart } = useCart();
-
     const [showAddressPopup, setShowAddressPopup] = useState(false);
-
     const [shippingAddress, setShippingAddress] = useState({
         name: '',
         address: '',
         city: '',
         zipCode: ''
-
     });
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    const handletestConfirmOrder = () => {
+    // Calculate total price of items in the cart based on totalPrice * quantity
+    const totalPrice = cartItems.reduce((total, item) => total + item.totalPrice * item.quantity, 0);
+
+    console.log("total price", totalPrice);
+
+
+    const handleConfirmOrder = () => {
         const token = localStorage.getItem('token');
         if (!token) {
-            navigate('/login')
+            navigate('/login');
+            return;
         }
-        // Show the popup when "Confirm Order" is clicked
-        setShowAddressPopup(true);
+        setShowAddressPopup(true); // Show address input popup
     };
-
-    console.log("cart page", cartItems);
-
-
 
     const handleAddressSubmit = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
-            navigate('/login')
-
+            navigate('/login');
+            return;
         }
         try {
             const response = await fetch('http://localhost:8000/save-address', {
@@ -48,12 +47,8 @@ const Cart = () => {
 
             if (response.ok) {
                 console.log('Address saved');
-                setShowAddressPopup(false); // Close the address popup
-                console.log("checkout start....");
-
-                // Proceed to checkout
-                handleCheckout();
-
+                setShowAddressPopup(false); // Close address popup
+                handleCheckout(); // Start the checkout process
             } else {
                 console.error('Error saving address');
             }
@@ -61,7 +56,6 @@ const Cart = () => {
             console.error('Error:', error);
         }
     };
-
 
     const loadRazorpayScript = () => {
         return new Promise((resolve) => {
@@ -77,14 +71,10 @@ const Cart = () => {
         });
     };
 
-
     const handlePayment = async (orderData) => {
+        console.log("Processing payment", orderData);
+
         const res = await loadRazorpayScript();
-        console.log("start razorpay");
-        console.log("order data", orderData);
-
-
-
         if (!res) {
             alert("Razorpay SDK failed to load. Are you online?");
             return;
@@ -99,12 +89,8 @@ const Cart = () => {
             image: "https://your-logo-url.com/logo.png", // Optional
             order_id: orderData.id, // Razorpay Order ID from backend
             handler: async (response) => {
-                // Handle successful payment response
-                console.log(response);
                 await updatePaymentStatus(response, orderData);
                 alert("Payment successful!");
-                // Store payment ID & update DB
-
                 clearCart();
             },
             prefill: {
@@ -123,11 +109,6 @@ const Cart = () => {
 
     const updatePaymentStatus = async (paymentResponse, orderData) => {
         const token = localStorage.getItem('token');
-        console.log(paymentResponse, orderData);
-        console.log("orderid", orderData.order._id);
-
-
-
         try {
             const response = await fetch(`http://localhost:8000/api/orders/${orderData.order._id}/payment`, {
                 method: 'PUT',
@@ -141,11 +122,11 @@ const Cart = () => {
                     status: 'paid',
                 }),
             });
-            const data = await response.json();
 
             if (response.ok) {
                 console.log('Payment status updated in the database');
             } else {
+                const data = await response.json();
                 console.error('Failed to update payment status', data);
             }
         } catch (error) {
@@ -153,23 +134,13 @@ const Cart = () => {
         }
     };
 
-
-
-
     const handleCheckout = async () => {
-        console.log("fetching token....");
-
         const token = localStorage.getItem('token');
-        console.log("get token....");
-        const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-        console.log("this is cart items", cartItems);
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
+        let finalShippingAddress = shippingAddress;
 
-
-        let finalShippingAddress = shippingAddress; // This could be from the address form
-        console.log(finalShippingAddress);
-
-        if (!finalShippingAddress) {
+        if (!finalShippingAddress.name) {
             try {
                 const addressResponse = await fetch('http://localhost:8000/api/address/get-address', {
                     method: 'GET',
@@ -190,9 +161,6 @@ const Cart = () => {
                 return;
             }
         }
-        const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-        console.log(totalPrice);
-
 
         try {
             const response = await fetch('http://localhost:8000/api/orders/checkout', {
@@ -203,25 +171,22 @@ const Cart = () => {
                 },
                 body: JSON.stringify({
                     items: cartItems,
-                    shippingAddress: finalShippingAddress, // Use the final address (either new or saved)
-                    totalPrice
+                    shippingAddress: finalShippingAddress,
+                    totalPrice  // where this calculated
                 })
             });
-            const orderData = await response.json(); // Parse the response body
-            console.log('order response:', orderData); // Log the entire response for debugging
 
+            const orderData = await response.json();
             if (response.ok) {
-                console.log('Checkout successful');
+                console.log('Checkout successful', orderData);
                 handlePayment(orderData);
             } else {
-                console.error('Error error creating order');
+                console.error('Error creating order');
             }
         } catch (error) {
             console.error('Checkout error:', error);
         }
     };
-
-
 
     return (
         <div className="container mx-auto mt-10">
@@ -244,11 +209,11 @@ const Cart = () => {
                                     />
                                 </div>
                                 <div className="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
-                                    <p className="text-xs leading-3 text-gray-800 md:pt-0 pt-4">Item ID: {item.id}</p>
+                                    <p className="text-xs leading-3 text-gray-800 md:pt-0 pt-4">Item ID: {item.productId}</p>
                                     <div className="flex items-center justify-between w-full">
                                         <p className="text-base font-black leading-none text-gray-800">{item.name}</p>
                                         <p className="text-base font-black leading-none text-gray-800">
-                                            Rs. {item.price * item.quantity}
+                                            Rs. {item.totalPrice * item.quantity}
                                         </p>
                                     </div>
                                     <p className="text-xs leading-3 text-gray-800">Color: {item.color}</p>
@@ -287,89 +252,69 @@ const Cart = () => {
                     <h1 className="font-semibold text-2xl border-b pb-8">Order Summary</h1>
                     <div className="flex justify-between mt-10 mb-5">
                         <span className="font-semibold text-sm uppercase">Items {cartItems.length}</span>
-                        <span className="font-semibold text-sm">
-                            Rs. {cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}
-                        </span>
+                        <span className="font-semibold text-sm">Rs. {totalPrice}</span>
                     </div>
-                    <div>
-                        <label className="font-medium inline-block mb-3 text-sm uppercase">Shipping</label>
-                        <select className="block p-2 text-gray-600 w-full text-sm">
-                            <option>Standard shipping - Rs. 100.00</option>
-                        </select>
+                    <div className="flex justify-between mt-10 mb-5">
+                        <span className="font-semibold text-sm uppercase">Shipping</span>
+                        <span className="font-semibold text-sm">Free</span>
                     </div>
-                    <div className="py-10">
-                        <label htmlFor="promo" className="font-semibold inline-block mb-3 text-sm uppercase">
-                            Promo Code
-                        </label>
-                        <input type="text" id="promo" placeholder="Enter your code" className="p-2 text-sm w-full" />
+                    <div className="flex justify-between mt-10 mb-5">
+                        <span className="font-semibold text-sm uppercase">Total</span>
+                        <span className="font-semibold text-sm">Rs. {totalPrice}</span>
                     </div>
-                    <button className="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">
-                        Apply
+                    <button
+                        onClick={handleConfirmOrder}
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 w-full mt-5"
+                    >
+                        Checkout
                     </button>
-                    <div className="border-t mt-8">
-                        <div className="flex font-semibold justify-between py-6 text-sm uppercase">
-                            <span>Total cost</span>
-                            <span>
-                                Rs. {cartItems.reduce((total, item) => total + item.price * item.quantity, 0) + 100}
-                            </span>
-                        </div>
-                        <button
-                            className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full"
-                            onClick={handletestConfirmOrder}
-                        >
-                            Confirm order
-                        </button>
-                    </div>
                 </div>
             </div>
 
-            {/* Popup Modal */}
             {showAddressPopup && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <h3 className="text-xl font-semibold mb-4">Enter Shipping Address</h3>
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="bg-white p-5 rounded-lg shadow-lg">
+                        <h2 className="text-lg font-semibold mb-4">Shipping Address</h2>
                         <input
                             type="text"
+                            placeholder="Name"
+                            className="border p-2 mb-2 w-full"
                             value={shippingAddress.name}
                             onChange={(e) => setShippingAddress({ ...shippingAddress, name: e.target.value })}
-                            placeholder="Name"
-                            className="block w-full p-2 mb-4 border border-gray-300 rounded"
                         />
                         <input
                             type="text"
+                            placeholder="Address"
+                            className="border p-2 mb-2 w-full"
                             value={shippingAddress.address}
                             onChange={(e) => setShippingAddress({ ...shippingAddress, address: e.target.value })}
-                            placeholder="Address"
-                            className="block w-full p-2 mb-4 border border-gray-300 rounded"
                         />
                         <input
                             type="text"
+                            placeholder="City"
+                            className="border p-2 mb-2 w-full"
                             value={shippingAddress.city}
                             onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })}
-                            placeholder="City"
-                            className="block w-full p-2 mb-4 border border-gray-300 rounded"
                         />
                         <input
                             type="text"
+                            placeholder="Zip Code"
+                            className="border p-2 mb-2 w-full"
                             value={shippingAddress.zipCode}
                             onChange={(e) => setShippingAddress({ ...shippingAddress, zipCode: e.target.value })}
-                            placeholder="Zip Code"
-                            className="block w-full p-2 mb-4 border border-gray-300 rounded"
                         />
-                        <div className="flex justify-end">
-                            <button
-                                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                                onClick={handleAddressSubmit}
-                            >
-                                Submit
-                            </button>
-                            <button
-                                className="bg-gray-500 text-white px-4 py-2 rounded"
-                                onClick={() => setShowAddressPopup(false)}
-                            >
-                                Cancel
-                            </button>
-                        </div>
+                        <button
+                            onClick={handleAddressSubmit}
+                            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 mt-4 w-full"
+                        >
+                            Save Address
+                        </button>
+                        <button
+                            onClick={() => setShowAddressPopup(false)}
+                            className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 mt-2 w-full"
+                        >
+                            Cancel
+                        </button>
                     </div>
                 </div>
             )}

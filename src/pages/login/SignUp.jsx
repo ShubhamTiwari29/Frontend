@@ -30,7 +30,7 @@ const Signup = () => {
             if (response.ok) {
                 const data = await response.json();
                 setSuccess(data.message);
-                navigate("/login");
+                // navigate("/login");
 
                 // Optionally, redirect the user or clear form fields
             } else {

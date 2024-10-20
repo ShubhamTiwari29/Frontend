@@ -16,22 +16,25 @@ const ShopContextProvider = (props) => {
 
     // Function to fetch products from the backend
     const fetchProducts = async () => {
+        let isMounted = true; // Keep track of component mount state
         try {
-            setLoading(true); // Set loading to true before starting the fetch
+            setLoading(true);
             const response = await fetch('http://localhost:8000/api/designer/coustmer/designs');
-            if (response.ok) {
+            if (response.ok && isMounted) {
                 const data = await response.json();
                 console.log("Shop data:", data);
-                setProducts(data); // Set products state with fetched data
+                setProducts(data);
             } else {
-                setError('Failed to fetch data from the server'); // Handle server error
+                setError('Failed to fetch data from the server');
             }
         } catch (err) {
-            setError('An error occurred while fetching data'); // Handle network or other errors
+            if (isMounted) setError('An error occurred while fetching data');
         } finally {
-            setLoading(false); // Set loading to false after data is fetched or an error occurs
+            if (isMounted) setLoading(false);
         }
+        return () => isMounted = false; // Cleanup function
     };
+
 
     // Provide context value
     const contextValue = {

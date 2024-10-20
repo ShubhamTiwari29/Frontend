@@ -1,12 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ShopContext } from '../components/Context/ShopContext';
 import { useCart } from '../components/Context/CartContext';
 import Item from '../components/Items/Item';
 import ColorDropdown from '../components/ProductDetails/ColorDropdown';
-import f1 from '../assets/frames/f1.png';
-import f2 from '../assets/frames/f2.png';
-import f3 from '../assets/frames/f3.png';
+import axios from 'axios';
+import SizeDropdown from '../components/ProductDetails/SizeDropdown';
 
 const ProductDetails = () => {
     const { products } = useContext(ShopContext);
@@ -14,20 +13,41 @@ const ProductDetails = () => {
     const navigate = useNavigate();
     const { addToCart } = useCart();
 
-    const [selectedSize, setSelectedSize] = useState("(8'x12')");
+    const [selectedSize, setSelectedSize] = useState(null);
     const [selectedColor, setSelectedColor] = useState({
         name: 'white',
-        imageUrl: f1,
+        imageUrl: '',
+        pricePerSquareInch: 0,
     });
     const [isZoomed, setIsZoomed] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
+    const [frames, setFrames] = useState([]);
 
-    // Available colors
-    const colors = [
-        { name: 'white', imageUrl: f1 },
-        { name: 'black', imageUrl: f2 },
-        { name: 'yellow', imageUrl: f3 },
-    ];
+    useEffect(() => {
+        const fetchFrames = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/seller/frames');
+                const frameData = response.data;
+                console.log("product detail page", frameData);
+
+
+                const processedFrames = frameData.map(frame => ({
+                    name: frame.name,
+                    imageUrl: frame.imageUrl,
+                    pricePerSquareInch: frame.pricePerSquareInch,
+                }));
+
+                setFrames(processedFrames);
+                if (processedFrames.length > 0) {
+                    setSelectedColor(processedFrames[0]);
+                }
+            } catch (error) {
+                console.error('Error fetching frames:', error);
+            }
+        };
+
+        fetchFrames();
+    }, []);
 
     const product = products.find(item => item._id === id);
     const similarProducts = products.filter(item =>
@@ -45,6 +65,7 @@ const ProductDetails = () => {
             alert("Please select a color and size.");
             return;
         }
+        const totalPrice = calculateTotalPrice();
 
         addToCart({
             productId: product._id,
@@ -53,7 +74,9 @@ const ProductDetails = () => {
             salePrice: product.salePrice,
             image: product.image,
             color: selectedColor.name,
-            size: selectedSize,
+            size: `${selectedSize.width}x${selectedSize.height}`,
+            totalPrice: Number(totalPrice),
+
         });
         navigate('/cart');
     };
@@ -66,6 +89,22 @@ const ProductDetails = () => {
     const closeZoom = () => {
         setIsZoomed(false);
         setSelectedImage('');
+    };
+
+    // Function to calculate frame price based on selected size and color
+    const calculateFramePrice = () => {
+        if (selectedSize) {
+            const area = selectedSize.width * selectedSize.height;
+            const framePrice = area * selectedColor.pricePerSquareInch;
+            return framePrice.toFixed(2);
+        }
+        return 0;
+    };
+
+    // Function to calculate total price
+    const calculateTotalPrice = () => {
+        const framePrice = parseFloat(calculateFramePrice());
+        return (product.price + framePrice).toFixed(2);
     };
 
     return (
@@ -112,7 +151,7 @@ const ProductDetails = () => {
                         <div className="mb-2">
                             <span className="font-bold">Select Frame:</span>
                             <ColorDropdown
-                                colors={colors}
+                                colors={frames}
                                 selectedColor={selectedColor}
                                 setSelectedColor={setSelectedColor}
                             />
@@ -122,20 +161,20 @@ const ProductDetails = () => {
                         <div className="mb-4">
                             <span className="font-bold">Select Size:</span>
                             <div className="mt-2">
-                                <select
-                                    value={selectedSize}
-                                    onChange={(e) => setSelectedSize(e.target.value)}
-                                    className="py-1 px-2 rounded border bg-gray-100 border-gray-300 transition-all"
-                                >
-                                    {["(8'x12')", "(12'x18')", "(18'x24')", "(20'x30')"].map(size => (
-                                        <option key={size} value={size}>
-                                            {size}
-                                        </option>
-                                    ))}
-                                </select>
+                                <SizeDropdown
+                                    sizes={product.validFrameSizes} // Pass the sizes prop here
+                                    selectedSize={selectedSize}
+                                    setSelectedSize={setSelectedSize}
+                                />
                             </div>
-                            <p className="text-sm text-gray-500 mt-2">Selected Size: {selectedSize}</p>
+                            <p className="text-sm text-gray-500 mt-2">Selected Size: {selectedSize ? `${selectedSize.width}x${selectedSize.height}` : "None"}</p>
                         </div>
+
+                        {/* Display Frame Price */}
+                        <p className="text-lg font-bold mt-4">Frame Price: Rs. {calculateFramePrice()}</p>
+
+                        {/* Total Price */}
+                        <p className="text-lg font-bold mt-4">Total Price: Rs. {calculateTotalPrice()}</p>
 
                         {/* Product Description */}
                         <div className="mb-4">
@@ -147,13 +186,13 @@ const ProductDetails = () => {
 
                         {/* Seller Information */}
                         <div className="mt-6">
-                            <h3 className="text-xl font-bold text-gray-800">Designer : </h3>
+                            <h3 className="text-xl font-bold text-gray-800">Designer:</h3>
                             <div className="mt-2 text-gray-700">
                                 <p>
                                     <strong>Name:</strong>
                                     <span
                                         className="text-blue-600 cursor-pointer hover:underline"
-                                        onClick={() => navigate(`/designer/${product.designerId._id}`)} // Change this to the correct path for the seller's store
+                                        onClick={() => navigate(`/designer/${product.designerId._id}`)}
                                     >
                                         {product.designerId.firstName} {product.designerId.lastName}
                                     </span>
@@ -182,16 +221,9 @@ const ProductDetails = () => {
                 {/* Similar Products Section */}
                 <div className="mt-8">
                     <h1 className="text-2xl font-bold mb-4">Similar Products</h1>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        {similarProducts.slice(0, 4).map((item, i) => (
-                            <Item
-                                key={i}
-                                id={item._id}
-                                name={item.title}
-                                image={item.image}
-                                price={item.price}
-                                salePrice={item.salePrice}
-                            />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        {similarProducts.map(item => (
+                            <Item key={item._id} item={item} />
                         ))}
                     </div>
                 </div>

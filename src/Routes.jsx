@@ -23,6 +23,8 @@ import { CartProvider } from './components/Context/CartContext';
 import VerifyOTP from './components/VerifyOTP/VerifyOTP';
 import OrderHistory from './pages/order/OrderHistory';
 import DesignerStore from './pages/designer/DesignerStore';
+import Wishlist from './pages/order/Wishlist';
+import { AuthContext, AuthProvider } from './components/Context/AuthContext';
 
 
 
@@ -30,40 +32,43 @@ const AppRoutes = () => {
   return (
 
     <Router>
-      <Navbar />
-      <CartProvider>
-        <ShopContextProvider>
-          <BlogContextProvider>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop category=" " />} />
+      <AuthProvider>
+        <Navbar />
+        <CartProvider>
+          <ShopContextProvider>
+            <BlogContextProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/art-gallery" element={<Shop />} />
 
-              <Route path="/shop/landscapes" element={<Shop title="landscape" category="men" />} />
-              <Route path="/shop/portraits" element={<Shop title="Portrate" category="women" />} />
-              <Route path="/shop/new-arrivals" element={<Shop title="New Arrival" category="kid" />} />
-              <Route path="/shop/custom-framing" element={<CustomFraming />} />
-              <Route path="/shop/:id" element={<ProductDetails />} />
-              <Route path="/designer/:id" element={<DesignerStore />} />
-              <Route path="/payment/:id" element={<Payment />} />
-              <Route path="/about-us" element={<AboutUs />} />
-              <Route path="/gallery" element={<Gallery />} />
+                {/* <Route path="/shop/landscapes" element={<Shop title="landscape" category="men" />} />
+                <Route path="/shop/portraits" element={<Shop title="Portrate" category="women" />} />
+                <Route path="/shop/new-arrivals" element={<Shop title="New Arrival" category="kid" />} /> */}
+                <Route path="/custom-framing" element={<CustomFraming />} />
+                <Route path="/shop/:id" element={<ProductDetails />} />
+                <Route path="/designer/:id" element={<DesignerStore />} />
+                <Route path="/payment/:id" element={<Payment />} />
+                <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/gallery" element={<Gallery />} />
 
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:id" element={<BlogDetail />} />
-              <Route path="/contact-us" element={<ContactUs />} />
-              <Route path="/my-account" element={<MyAccount />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/order-history" element={<OrderHistory />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<BlogDetail />} />
+                <Route path="/contact-us" element={<ContactUs />} />
+                <Route path="/my-account" element={<MyAccount />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/order-history" element={<OrderHistory />} />
+                <Route path="/wishlist" element={<Wishlist />} />
 
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/verify-otp" element={<VerifyOTP />} />
-            </Routes>
-          </BlogContextProvider>
-        </ShopContextProvider>
-      </CartProvider>
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/verify-otp" element={<VerifyOTP />} />
+              </Routes>
+            </BlogContextProvider>
+          </ShopContextProvider>
+        </CartProvider>
 
-      <Footer />
+        <Footer />
+      </AuthProvider>
     </Router>
   );
 };
