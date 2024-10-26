@@ -1,46 +1,47 @@
 import React, { createContext, useState, useEffect } from "react";
+import axios from 'axios';
 
-// Create a new context
 export const ShopContext = createContext(null);
 
 const ShopContextProvider = (props) => {
-    // States for products, loading, and error
-    const [products, setProducts] = useState([]); // Initialize with an empty array
-    const [loading, setLoading] = useState(true); // Loading is true initially
-    const [error, setError] = useState(null); // Error state to handle errors
+    const [products, setProducts] = useState([]);
+    const [topViewedProducts, setTopViewedProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [page, setPage] = useState(1); // Track the current page
+    const [hasMore, setHasMore] = useState(true); // Track if there are more products to load
 
     useEffect(() => {
-        // Fetch products from the backend on component mount
-        fetchProducts();
-    }, []); // Empty dependency array ensures this runs only once when the component mounts
+        fetchProducts(page);
+    }, [page]);
 
-    // Function to fetch products from the backend
-    const fetchProducts = async () => {
-        let isMounted = true; // Keep track of component mount state
+    const fetchProducts = async (currentPage) => {
+        setLoading(true);
         try {
-            setLoading(true);
-            const response = await fetch('http://localhost:8000/api/designer/coustmer/designs');
-            if (response.ok && isMounted) {
-                const data = await response.json();
-                console.log("Shop data:", data);
-                setProducts(data);
-            } else {
-                setError('Failed to fetch data from the server');
-            }
+            const response = await axios.get(`http://localhost:8000/api/designer/coustmer/pagination/designs?page=${currentPage}&limit"5"`);
+            const newProducts = response.data.designs;
+            console.log(newProducts.length);
+            setTopViewedProducts(response.data.topViewedDesigns.slice(0, 3))
+
+            setProducts((prevProducts) => currentPage === 1 ? newProducts : [...prevProducts, ...newProducts]);
+            setHasMore(newProducts.length > 0);
         } catch (err) {
-            if (isMounted) setError('An error occurred while fetching data');
+            setError('Failed to fetch products');
         } finally {
-            if (isMounted) setLoading(false);
+            setLoading(false);
         }
-        return () => isMounted = false; // Cleanup function
     };
 
+    const loadMoreProducts = () => setPage((prevPage) => prevPage + 1); // Increase page to fetch next set
 
-    // Provide context value
     const contextValue = {
-        products, // Fetched products array
-        loading, // Loading state
-        error // Error message if any
+        products,
+        topViewedProducts,
+        loading,
+        error,
+        hasMore,
+        fetchProducts,
+        loadMoreProducts // Add this function to increment the page
     };
 
     return (

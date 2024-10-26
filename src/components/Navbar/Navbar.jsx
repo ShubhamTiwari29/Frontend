@@ -19,15 +19,15 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="navbar md:text-[14px] md:px-20">
+        <nav className="navbar bg-[#111827] text-white md:text-[14px] md:px-20">
+            <div className='logo'>
+                <h1 className=''>COMPANY NAME</h1>
+            </div>
 
             {isDesktop ? <Menu /> : <Mobilemenu />}
 
 
 
-            <div className='logo'>
-                <h1 className=''>COMPANY NAME</h1>
-            </div>
 
         </nav>
     );

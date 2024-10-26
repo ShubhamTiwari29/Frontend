@@ -1,25 +1,27 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Item = (props) => {
+const Item = ({ item }) => {
     const navigate = useNavigate();
+
 
     const handleAddToCartClick = () => {
         // Redirect to the product detail page
-        navigate(`/shop/${props.id}`);
+        navigate(`/shop/${item._id}`);
     };
 
     return (
         <div className="border rounded-lg overflow-hidden shadow-lg bg-white transition-transform transform hover:scale-105">
             {/* Image and details wrapper */}
             <div className="relative">
-                <Link to={`/shop/${props.id}`} className="block">
+                <Link to={`/shop/${item._id}`} className="block">
                     {/* Image container with fixed aspect ratio */}
                     <div className="w-full h-64 overflow-hidden">
                         <img
-                            className="w-full h-full object-contain"
-                            src={props.image}
-                            alt={props.name}
+                            className="w-full h-full object-contain transition-transform transform hover:scale-110"
+                            src={item.image}
+                            alt={item.name || 'Product image'}
                         />
                     </div>
                 </Link>
@@ -27,11 +29,11 @@ const Item = (props) => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-50"></div>
             </div>
             <div className="p-6">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-2">{props.name}</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-2">{item.title}</h2>
                 <div className="flex items-center mb-4">
-                    <span className="text-xl font-bold text-gray-900">${props.new_price}</span>
-                    {props.old_price && (
-                        <span className="text-xl ml-4 line-through text-gray-500">${props.old_price}</span>
+                    <span className="text-xl font-bold text-gray-900">₹{item.sellingPrice}</span>
+                    {item.price && (
+                        <span className="text-xl ml-4 line-through text-gray-500">₹{item.price}</span>
                     )}
                 </div>
                 <button

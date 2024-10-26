@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 
-const MassonaryComponent = ({ item }) => {
+const MassonaryComponent = forwardRef(({ item }, ref) => {
     const navigate = useNavigate();
     const [wishlist, setWishlist] = useState([]);
     const [isInWishlist, setIsInWishlist] = useState(false);
+
+    console.log(item);
+
 
     // Fetch the wishlist when the component loads
     useEffect(() => {
@@ -63,7 +66,6 @@ const MassonaryComponent = ({ item }) => {
 
     // Function to handle incrementing views and navigation
     const handleClick = async () => {
-
         try {
             await fetch(`http://localhost:8000/api/designer/designs/view/${item._id}`, {
                 method: 'PATCH',
@@ -80,8 +82,9 @@ const MassonaryComponent = ({ item }) => {
 
     return (
         <div
+            ref={ref} // Attach ref here for Masonry
             className="relative group border rounded-lg overflow-hidden shadow-lg cursor-pointer transition-all duration-300 ease-in-out hover:shadow-xl mb-6"
-            onClick={handleClick}  // Increment view and navigate
+            onClick={handleClick}
         >
             <img
                 src={item.image}
@@ -97,16 +100,26 @@ const MassonaryComponent = ({ item }) => {
                     )}
                 </button>
             </div>
-            {/* Price and "Buy Now" button at the bottom of the image */}
-            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-3 flex justify-between items-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-3 md:flex justify-between items-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden">
                 <p className="text-lg font-semibold">₹{item.price}</p>
                 <button className="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded transition duration-300 flex items-center space-x-2">
                     <FaShoppingCart />
                     <span>Buy</span>
                 </button>
             </div>
+
+            <div className="p-3 bg-white bg-opacity-80 text-black md:hidden">
+                <h3 className="text-lg font-semibold">{item.title}</h3>
+                <div className="flex flex-row space-x-4 mt-1">
+
+                    <p className="text-sm">Price: ₹{item.sellingPrice}</p>
+                    <p className="text-sm text-red-300 line-through"> ₹{item.price}</p>
+                </div>
+                <div className="flex items-center justify-between mt-2">
+                </div>
+            </div>
         </div>
     );
-};
+});
 
 export default MassonaryComponent;

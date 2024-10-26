@@ -25,6 +25,7 @@ import OrderHistory from './pages/order/OrderHistory';
 import DesignerStore from './pages/designer/DesignerStore';
 import Wishlist from './pages/order/Wishlist';
 import { AuthContext, AuthProvider } from './components/Context/AuthContext';
+import ScrollToTop from './components/scroll/ScrollToTop';
 
 
 
@@ -34,6 +35,7 @@ const AppRoutes = () => {
     <Router>
       <AuthProvider>
         <Navbar />
+        <ScrollToTop />
         <CartProvider>
           <ShopContextProvider>
             <BlogContextProvider>
@@ -41,9 +43,6 @@ const AppRoutes = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/art-gallery" element={<Shop />} />
 
-                {/* <Route path="/shop/landscapes" element={<Shop title="landscape" category="men" />} />
-                <Route path="/shop/portraits" element={<Shop title="Portrate" category="women" />} />
-                <Route path="/shop/new-arrivals" element={<Shop title="New Arrival" category="kid" />} /> */}
                 <Route path="/custom-framing" element={<CustomFraming />} />
                 <Route path="/shop/:id" element={<ProductDetails />} />
                 <Route path="/designer/:id" element={<DesignerStore />} />

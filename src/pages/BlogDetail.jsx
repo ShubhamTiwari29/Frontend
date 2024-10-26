@@ -83,9 +83,9 @@ const BlogDetail = () => {
     };
 
     return (
-        <div className="bg-gray-50 min-h-screen">
+        <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen">
             <div className="py-12">
-                <div className="container mx-auto px-4 text-black text-center">
+                <div className="container bg-white mx-auto  text-black text-center">
                     <h1 className="text-5xl font-bold mb-4">{blog.title || 'Loading...'}</h1>
                     <div className="bg-white bg-opacity-30 rounded-md p-4 mb-4 shadow-md">
                         <div className="flex items-center justify-center space-x-4">

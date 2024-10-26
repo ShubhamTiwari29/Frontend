@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../Context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { BsUpload } from "react-icons/bs";
@@ -75,6 +75,7 @@ const CustomerProductForm = () => {
                 setImageMetadata(data)
 
 
+
                 return data;
             } else {
                 const errorData = await response.json();
@@ -89,6 +90,16 @@ const CustomerProductForm = () => {
         }
         return null;
     };
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                setMessage('');
+            }, 6000);
+
+            // Cleanup the timer
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
 
     const calculateTotalPrice = (selectedSize, selectedStyle) => {
         const selectedFrame = framestyle.find(frame => frame.name === selectedStyle);
@@ -109,6 +120,7 @@ const CustomerProductForm = () => {
         setImagePreview(null);
         setIsFieldsEnabled(false);
     };
+
 
     const handleAddToCart = async (e) => {
         e.preventDefault();
@@ -178,13 +190,41 @@ const CustomerProductForm = () => {
 
 
     return (
-        <div className="flex flex-col lg:flex-row items-center bg-white my-12 p-8 rounded-lg shadow-lg border border-gray-300">
-            <div className="lg:w-1/2 p-8 rounded-lg mb-8 lg:mb-0 lg:mr-8 bg-gradient-to-br from-blue-600 to-indigo-500 text-white flex flex-col justify-center">
-                <h1 className="text-5xl font-bold mb-4">Create Your Perfect Frame</h1>
-                <p className="text-xl mb-4">Transform your cherished moments into beautifully framed art pieces.</p>
+        <div className="flex flex-col-reverse lg:flex-row items-center bg-white my-12 p-2 md:p-8 rounded-lg shadow-lg border border-gray-300">
+            <div className="lg:w-1/2 p-8 rounded-lg mb-8 lg:mb-0 lg:mr-8 bg-gradient-to-b from-blue-50 to-white text-black flex flex-col justify-center shadow-lg transition-transform transform max-w-full mx-auto">
+                <h1 className="text-3xl lg:text-5xl font-bold mb-4 text-center">Convert Images into Displays</h1>
+                <p className="text-lg lg:text-xl mb-6 text-center">Transform your images into beautifully framed displays with our easy-to-follow process:</p>
+                <ol className="list-decimal list-inside space-y-4">
+                    <li className="flex items-start space-x-3">
+                        <span className="text-yellow-400 text-2xl">📸</span>
+                        <div>
+                            <strong>Upload Your Picture:</strong> Start by uploading the image you want to frame. Ensure it meets the required dimensions for the best results.
+                        </div>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                        <span className="text-yellow-400 text-2xl">📐</span>
+                        <div>
+                            <strong>Analyze Picture Dimensions:</strong> Once uploaded, our system will automatically analyze the dimensions of your image to determine the optimal frame size.
+                        </div>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                        <span className="text-yellow-400 text-2xl">🖼️</span>
+                        <div>
+                            <strong>Select Frame Style & Size:</strong> After the analysis, browse our collection of frame styles and sizes. Choose the one that best complements your image and fits your preferences.
+                        </div>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                        <span className="text-yellow-400 text-2xl">✔️</span>
+                        <div>
+                            <strong>Place Your Order:</strong> Review your selections and finalize your order. After placing your order, we’ll handle the rest and create your stunning framed display.
+                        </div>
+                    </li>
+                </ol>
             </div>
 
-            <form className="lg:w-1/2 bg-gray-100 p-6 rounded-lg shadow-inner" onSubmit={handleAddToCart}>
+
+
+            <form className="lg:w-1/2 w-full bg-gray-100 p-2 md:p-6 my-2 rounded-lg shadow-inner" onSubmit={handleAddToCart}>
                 {imagePreview && (
                     <div className="mb-4 flex justify-center flex-col items-center">
                         <img src={imagePreview} alt="Product Preview" className="max-w-full h-40 rounded-lg shadow-md border-2 border-gray-200 mb-4" />
@@ -212,6 +252,13 @@ const CustomerProductForm = () => {
                                 required
                             />
                         </label>
+                    </div>
+                )}
+
+
+                {message && (
+                    <div className={`mt-4 p-4 rounded-lg ${messageType === 'error' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
+                        {message}
                     </div>
                 )}
 
@@ -286,15 +333,10 @@ const CustomerProductForm = () => {
                                 className="py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200"
                                 disabled={isLoading}
                             >
-                                {isLoading ? 'Adding to Cart...' : 'Add to Cart'}
+                                {isLoading ? 'Calculating...' : 'Add to Cart'}
                             </button>
                         </div>
 
-                        {message && (
-                            <div className={`mt-4 p-4 rounded-lg ${messageType === 'error' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
-                                {message}
-                            </div>
-                        )}
                     </fieldset>
                 )}
             </form>

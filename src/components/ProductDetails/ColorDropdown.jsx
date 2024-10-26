@@ -36,7 +36,7 @@ const ColorDropdown = ({ colors, selectedColor, setSelectedColor }) => {
                             <img
                                 src={color.imageUrl}
                                 alt={color.name}
-                                className="w-6 h-6 rounded-md mr-2"
+                                className="w-16 h-12 rounded-md mr-2"
                             />
                             <span className="capitalize">{color.name}</span>
                         </li>

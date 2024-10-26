@@ -33,21 +33,23 @@ const Blog = () => {
     if (error) return <div>{error}</div>;
 
     return (
-        <div className='m-4 xl:container xl:mx-auto md:mx-14'>
-            {/* Your header and content here */}
-            {currentBlogs.map((item) => (
-                <BlogList key={item._id} id={item._id} title={item.title} description={item.content} image={item.image} />
-            ))}
-            <Pagination
-                itemsPerPage={dataPerPage}
-                totalItems={blogs.length}
-                paginate={setPageNo}
-                currentPage={pageNo}
-                firstData={firstDataIndex + 1}
-                lastData={lastDataIndex}
-                increasePageNo={increasePage}
-                decreasePageNo={decreasePage}
-            />
+        <div className='bg-gradient-to-b from-blue-50 to-white py-10'>
+            <div className='m-4 xl:container xl:mx-auto md:mx-14'>
+                {/* Your header and content here */}
+                {currentBlogs.map((item) => (
+                    <BlogList key={item._id} id={item._id} title={item.title} description={item.content} image={item.image} />
+                ))}
+                <Pagination
+                    itemsPerPage={dataPerPage}
+                    totalItems={blogs.length}
+                    paginate={setPageNo}
+                    currentPage={pageNo}
+                    firstData={firstDataIndex + 1}
+                    lastData={lastDataIndex}
+                    increasePageNo={increasePage}
+                    decreasePageNo={decreasePage}
+                />
+            </div>
         </div>
     );
 };
