@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import DownloadImageDisplay from '../components/downloadImage/downloadImageDisplay';
+import DownloadImageDisplay from '../components/downloadImage/downloadImageDisplay.jsx';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
 const DownloadImage = () => {
