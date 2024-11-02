@@ -16,7 +16,7 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
         const fetchWishlist = async () => {
             const token = localStorage.getItem('token');
             try {
-                const response = await fetch('http://localhost:8000/api/coustmer/wishlist', {
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/coustmer/wishlist`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

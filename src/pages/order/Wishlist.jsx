@@ -17,7 +17,7 @@ const Wishlist = () => {
             if (!user) return; // If no user, don't fetch
 
             try {
-                const response = await fetch('http://localhost:8000/api/coustmer/wishlist', {
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/coustmer/wishlist`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

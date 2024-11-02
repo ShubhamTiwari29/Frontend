@@ -10,13 +10,7 @@ const Home = () => {
 
   console.log("top products", topViewedProducts);
 
-  // Sample image collection and testimonials
-  // const topViewedProducts = [
-  //   { id: 1, title: 'Girl', price: '$29.99', image: '/images/sunset.jpg' },
-  //   { id: 2, title: 'Mountain', price: '$39.99', image: '/images/mountain.jpg' },
-  //   { id: 3, title: 'Ocean View', price: '$34.99', image: '/images/ocean.jpg' },
-  //   // Add more images as needed
-  // ];
+
 
   const testimonials = [
     {
@@ -39,6 +33,9 @@ const Home = () => {
   const handleImageGallery = (title = '') => {
     navigate(`/art-gallery?search=${title}`);
   };
+
+
+
 
 
   return (

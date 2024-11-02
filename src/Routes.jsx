@@ -20,12 +20,13 @@ import ProductDetails from './pages/ProductDetails';
 import BlogDetail from './pages/BlogDetail';
 import Payment from './pages/Payment';
 import { CartProvider } from './components/Context/CartContext';
-import VerifyOTP from './components/VerifyOTP/VerifyOTP';
+// import VerifyOTP from './components/VerifyOTP/VerifyOTP';
 import OrderHistory from './pages/order/OrderHistory';
 import DesignerStore from './pages/designer/DesignerStore';
 import Wishlist from './pages/order/Wishlist';
 import { AuthContext, AuthProvider } from './components/Context/AuthContext';
 import ScrollToTop from './components/scroll/ScrollToTop';
+import DownloadImage from './pages/DownloadImage';
 
 
 
@@ -58,9 +59,10 @@ const AppRoutes = () => {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/order-history" element={<OrderHistory />} />
                 <Route path="/wishlist" element={<Wishlist />} />
+                <Route path="/downloads" element={<DownloadImage />} />
 
                 <Route path="/cart" element={<Cart />} />
-                <Route path="/verify-otp" element={<VerifyOTP />} />
+                {/* <Route path="/verify-otp" element={<VerifyOTP />} /> */}
               </Routes>
             </BlogContextProvider>
           </ShopContextProvider>

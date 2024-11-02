@@ -1,20 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ShopContext } from '../components/Context/ShopContext';
 import { useCart } from '../components/Context/CartContext';
-
 import ColorDropdown from '../components/ProductDetails/ColorDropdown';
 import Masonry from 'react-masonry-css';
 import axios from 'axios';
 import SizeDropdown from '../components/ProductDetails/SizeDropdown';
 import MassonaryComponent from '../components/masonary/Massonary';
+import { handlePayment } from '../components/payment/cartPayment';
 
 const ProductDetails = (props) => {
     const { products } = useContext(ShopContext);
     const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
-
+    const [designer, setDesigner] = useState('');
     const [selectedSize, setSelectedSize] = useState(null);
     const [selectedColor, setSelectedColor] = useState({
         name: 'white',
@@ -37,10 +37,14 @@ const ProductDetails = (props) => {
     useEffect(() => {
         const fetchFrames = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/seller/frames');
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/seller/frames`);
                 const frameData = response.data;
 
+                console.log("frame data", frameData);
+
+
                 const processedFrames = frameData.map(frame => ({
+                    id: frame._id,
                     name: frame.name,
                     imageUrl: frame.imageUrl,
                     pricePerSquareInch: frame.pricePerSquareInch,
@@ -59,6 +63,7 @@ const ProductDetails = (props) => {
     }, []);
 
     const product = products.find(item => item._id === id);
+
     const similarProducts = products.filter(item => {
         const isDifferentProduct = item._id !== product?._id;
         const hasMatchingTags = product?.tags.some(tag => item.tags.includes(tag));
@@ -69,8 +74,16 @@ const ProductDetails = (props) => {
 
         return isDifferentProduct && (hasMatchingTags || hasMatchingOrientation || hasMatchingTitleKeywords);
     });
+    useEffect(() => {
+        if (product?.designerId) {
+            setDesigner({
+                firstName: product.designerId.firstName,
+                lastName: product.designerId.lastName,
+                _id: product.designerId._id,
+            });
+        }
+    }, [product]);
 
-    console.log("similar product", similarProducts);
 
     if (!product) {
         return <div className="text-center text-gray-700">Product not found</div>;
@@ -78,7 +91,7 @@ const ProductDetails = (props) => {
 
     console.log(product);
 
-
+    // percent also calculate for frames
     const savingPercentage = (((product.price - product.sellingPrice) / product.price
     ) * 100).toFixed(2);
 
@@ -96,8 +109,12 @@ const ProductDetails = (props) => {
             salePrice: product.salePrice,
             image: product.image,
             color: selectedColor.name,
+            frameDesignId: selectedColor.id,
+            width: `${selectedSize.width}`,
+            height: `${selectedSize.height}`,
             size: `${selectedSize.width}x${selectedSize.height}`,
             totalPrice: Number(totalPrice),
+            source: "designer"
         });
         navigate('/cart');
     };
@@ -129,21 +146,46 @@ const ProductDetails = (props) => {
     };
 
     // Simulate payment process and fetch download link from backend
-    const handlePayment = async () => {
+    const handleBillingPayment = async () => {
         if (validateBillingInfo()) {
             setIsProcessingPayment(true); // Show spinner
             try {
-                const response = await axios.post('http://localhost:8000/api/coustmer/Image-billing', {
-                    ...billingInfo,
-                    productId: product._id, // Pass product ID for payment processing
-                });
+                const token = localStorage.getItem('token'); // Assuming the JWT token is stored in localStorage
+
+                const response = await axios.post(
+                    'http://localhost:8000/api/coustmer/Image-billing',
+                    {
+                        ...billingInfo,
+                        designId: product._id, // Pass product ID for payment processing
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
+                        },
+                    }
+                );
+
+
 
                 if (response.data.success) {
+                    console.log("data check", response.data);
+
+                    const { order } = response.data;
+
+                    console.log("Order details:", order);
+
+                    // Step 2: Pass order details to handlePayment function
+                    const billingStatus = await handlePayment(order);
+                    console.log(billingStatus);
+
+
                     setIsPaymentSuccessful(true);
-                    setDownloadUrl(response.data.downloadUrl); // Save download link
+
+
                 } else {
                     alert('Payment failed. Please try again.');
                 }
+
             } catch (error) {
                 alert('Error processing payment. Please try again later.');
                 console.error(error);
@@ -180,15 +222,33 @@ const ProductDetails = (props) => {
                                 onClick={() => handleImageClick(product.image)}
                             />
                             {isZoomed && (
-                                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center" onClick={closeZoom}>
-                                    <img className="w-[90%] h-auto object-contain" src={selectedImage || product.image} alt="Zoomed" />
+                                <div
+                                    className="absolute inset-x-0 top-[180px] bottom-0 bg-black bg-opacity-40 flex items-center justify-center"
+                                    onClick={closeZoom}
+                                >
+                                    <div className="relative">
+                                        <button
+                                            className="absolute top-2 right-2 text-white bg-black bg-opacity-75 rounded-full p-2"
+                                            onClick={closeZoom}
+                                            aria-label="Close Zoomed Image"
+                                        >
+                                            ✕
+                                        </button>
+                                        <img
+                                            className="w-[100%] max-w-screen max-h-[calc(100vh-180px)] h-auto object-contain"
+                                            src={selectedImage || product.image}
+                                            alt="Zoomed"
+                                        />
+                                    </div>
                                 </div>
                             )}
+
+
                         </div>
                     </div>
 
                     {/* Product Details Section */}
-                    <div className="md:flex-1">
+                    <div className="md:flex-1 bg-white shadow-lg">
                         <h2 className="text-3xl font-bold text-gray-800 mb-2">{product.title}</h2>
 
                         <div className="flex items-center mb-4">
@@ -306,7 +366,7 @@ const ProductDetails = (props) => {
                                 {/* Payment Button */}
                                 <button
                                     className={`mt-4 bg-green-600 text-white py-2 px-4 rounded-lg shadow hover:bg-green-500 ${isProcessingPayment ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                    onClick={handlePayment}
+                                    onClick={handleBillingPayment}
                                     disabled={isProcessingPayment} // Disable button while processing
                                 >
                                     {isProcessingPayment ? 'Processing...' : 'Make Payment'}
@@ -326,12 +386,34 @@ const ProductDetails = (props) => {
                                 )}
                             </div>
                         )}
+
+                        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                            <h1 className="text-2xl font-bold mb-4">Designer</h1>
+                            <div>
+                                {/* Check if designer exists before trying to access its properties */}
+                                {designer ? (
+                                    <p className="text-lg">
+                                        Name:
+                                        <Link
+                                            to={`/designer/${designer._id}`} // Ensure this is defined
+                                            className="text-yellow-600 hover:underline ml-2"
+                                        >
+                                            {designer.firstName} {designer.lastName}
+                                        </Link>
+                                    </p>
+                                ) : (
+                                    <p className="text-gray-600">Designer information not available.</p>
+                                )}
+                                <p className="text-gray-600">Other designer details can go here.</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </div>
+            </div >
 
             {/* Similar Products Section */}
-            <div className='mx-auto max-w-6xl my-4'>
+            < div className='mx-auto max-w-6xl my-4' >
                 <h1>Similar Images</h1>
                 <Masonry
                     breakpointCols={{ default: 4, 1300: 3, 1100: 2, 767: 2, 500: 1 }}
@@ -352,7 +434,7 @@ const ProductDetails = (props) => {
                         <p className="text-gray-600">No similar products found.</p>
                     )}
                 </Masonry >
-            </div>
+            </div >
         </div >
     );
 };

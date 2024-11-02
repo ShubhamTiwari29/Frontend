@@ -50,4 +50,4 @@ const VerifyOTP = () => {
     );
 };
 
-export default VerifyOTP;
+// export default VerifyOTP;

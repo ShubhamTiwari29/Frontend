@@ -18,7 +18,7 @@ const ShopContextProvider = (props) => {
     const fetchProducts = async (currentPage) => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:8000/api/designer/coustmer/pagination/designs?page=${currentPage}&limit"5"`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/designer/coustmer/pagination/designs?page=${currentPage}&limit"5"`);
             const newProducts = response.data.designs;
             console.log(newProducts.length);
             setTopViewedProducts(response.data.topViewedDesigns.slice(0, 3))

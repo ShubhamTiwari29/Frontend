@@ -12,7 +12,7 @@ const BlogContextProvider = (props) => {
         const fetchBlogs = async () => {
             setLoading(true);
             try {
-                const response = await axios.get('http://localhost:8000/api/blogs');
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/blogs`);
                 console.log(response.data);
 
                 setBlogs(response.data);

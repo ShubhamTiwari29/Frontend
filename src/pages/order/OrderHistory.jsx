@@ -13,7 +13,7 @@ const OrderHistory = () => {
                 const token = localStorage.getItem('token');
                 if (!token) throw new Error('No token found');
 
-                const response = await axios.get('http://localhost:8000/api/orders/order-history', {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/orders/order-history`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -67,9 +67,9 @@ const OrderHistory = () => {
                                         <li key={index} className="flex items-center space-x-3 border-b py-2">
 
                                             <img
-                                                src={item.productId.image || 'https://via.placeholder.com/64'}
+                                                src={item?.productId?.image || 'https://via.placeholder.com/64'}
                                                 // src={'https://via.placeholder.com/64'}
-                                                alt={item.productId.image}
+                                                alt={item.productId?.image}
                                                 className="w-16 h-16 object-cover rounded shadow"
                                             />
                                             <div className="flex-1">

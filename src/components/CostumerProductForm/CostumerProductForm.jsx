@@ -8,7 +8,10 @@ const CustomerProductForm = () => {
     const [imageMetadata, setImageMetadata] = useState('');
     const [framesize, setFramesize] = useState('');
     const [framestyle, setFramestyle] = useState([]);
+    const [selectedFrameId, setSelectedFrameId] = useState();
     const [selectedFrameStyle, setSelectedFrameStyle] = useState('');
+    const [frameWidth, setFrameWidth] = useState('');
+    const [frameHeight, setFrameHeight] = useState('');
     const [selectedFrameStyleImage, setSelectedFrameStyleImage] = useState('');
     const [imageUrl, setImageUrl] = useState('');  // State to store uploaded image URL
     const [quantity, setQuantity] = useState(1);
@@ -19,6 +22,8 @@ const CustomerProductForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isFieldsEnabled, setIsFieldsEnabled] = useState(false);
     const [validFrameSizes, setValidFrameSizes] = useState([]);
+
+    console.log("frame Size", framesize);
 
     const navigate = useNavigate();
     const { addToCart } = useCart();
@@ -39,6 +44,10 @@ const CustomerProductForm = () => {
     const handleFramesizeChange = (e) => {
         const selectedSize = e.target.value;
         setFramesize(selectedSize);
+        const [width, height] = selectedSize.split('x');
+        setFrameWidth(width.trim());
+        setFrameHeight(height.trim());
+
         calculateTotalPrice(selectedSize, selectedFrameStyle);
     };
 
@@ -104,6 +113,10 @@ const CustomerProductForm = () => {
     const calculateTotalPrice = (selectedSize, selectedStyle) => {
         const selectedFrame = framestyle.find(frame => frame.name === selectedStyle);
 
+        setSelectedFrameId(selectedFrame._id)
+        console.log("selected frame", selectedFrame);
+
+
         if (selectedFrame && selectedSize) {
             const { pricePerSquareInch } = selectedFrame;
             const [width, height] = selectedSize.split('x').map(Number);
@@ -114,6 +127,8 @@ const CustomerProductForm = () => {
             }
         }
     };
+
+
 
     const handleChangeImage = () => {
         setImage(null);
@@ -143,7 +158,7 @@ const CustomerProductForm = () => {
             };
 
             // Send the data to the backend
-            const response = await fetch('http://localhost:8000/api/customframing/coustom-framing/design', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/customframing/coustom-framing/design`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,  // JWT token for authentication
@@ -153,6 +168,7 @@ const CustomerProductForm = () => {
             });
 
             const { data } = await response.json(); // destructured here because from backend data is wraped in data use here {},
+
             console.log("uploaded data", data);
 
             if (response.ok) {
@@ -169,10 +185,30 @@ const CustomerProductForm = () => {
                     salePrice: data.price,
                     image: data.imageUrl,
                     color: data.frameStyle,
+                    frameDesignId: selectedFrameId,
+                    width: frameWidth,
+                    height: frameHeight,
                     size: framesize,
                     totalPrice: price,
+                    source: "customer",
 
                 });
+                console.log("frame Size", framesize);
+
+
+                // addToCart({
+                //     productId: product._id,
+                //     name: product.title,
+                //     price: product.price,
+                //     salePrice: product.salePrice,
+                //     image: product.image,
+                //     color: selectedColor.name,
+                //     frameDesignId: selectedColor.id,
+                //     width: `${selectedSize.width}`,
+                //     height: `${selectedSize.height}`,
+                //     size: `${selectedSize.width}x${selectedSize.height}`,
+                //     totalPrice: Number(totalPrice),
+                // });
 
                 setIsLoading(false);
                 // navigate('/cart');  // Navigate to the cart page after adding the product to the cart

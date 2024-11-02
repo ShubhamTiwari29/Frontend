@@ -19,7 +19,7 @@ const Signup = () => {
         setSuccess('');
 
         try {
-            const response = await fetch('http://localhost:8000/auth/Signup', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/Signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

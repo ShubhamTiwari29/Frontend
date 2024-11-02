@@ -40,7 +40,7 @@ function BlogList(props) {
     };
 
     return (
-        <div className='flex bg-white shadow-xl my-3 xl:mx-36 hover:scale-105 hover:ease-in-out transition duration-500 hover:shadow-2xl'>
+        <div className='flex bg-white shadow-xl my-3  hover:scale-105 hover:ease-in-out transition duration-500 hover:shadow-2xl'>
             <Link to={`/Blog/${props.id}`} className="flex-grow">
                 <div className='flex items-center'>
                     <img

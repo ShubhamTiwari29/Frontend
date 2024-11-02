@@ -1,4 +1,4 @@
-// src/components/RazorpayCheckout.js
+
 import React from 'react';
 
 const RazorpayCheckout = ({ amount, email }) => {

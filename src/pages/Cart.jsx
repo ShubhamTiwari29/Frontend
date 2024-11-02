@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useCart } from '../components/Context/CartContext';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
+import { handlePayment } from '../components/payment/cartPayment';
 const Cart = () => {
     const { cartItems, removeFromCart, decreaseQuantity, increaseQuantity, clearCart } = useCart();
     const [showAddressPopup, setShowAddressPopup] = useState(false);
@@ -36,7 +37,7 @@ const Cart = () => {
             return;
         }
         try {
-            const response = await fetch('http://localhost:8000/save-address', {
+            const response = await fetch('http://localhost:8000/api/address/save-address', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,97 +58,24 @@ const Cart = () => {
         }
     };
 
-    const loadRazorpayScript = () => {
-        return new Promise((resolve) => {
-            const script = document.createElement("script");
-            script.src = "https://checkout.razorpay.com/v1/checkout.js";
-            script.onload = () => {
-                resolve(true);
-            };
-            script.onerror = () => {
-                resolve(false);
-            };
-            document.body.appendChild(script);
-        });
-    };
-
-    const handlePayment = async (orderData) => {
-        console.log("Processing payment", orderData);
-
-        const res = await loadRazorpayScript();
-        if (!res) {
-            alert("Razorpay SDK failed to load. Are you online?");
-            return;
-        }
-
-        const options = {
-            key: "rzp_test_Q2Nu73kBCORtIp", // Replace with your Razorpay Key ID
-            amount: orderData.order.totalPrice * 100, // Amount in paise
-            currency: "INR",
-            name: "Laykamp",
-            description: "Test Transaction",
-            image: "https://your-logo-url.com/logo.png", // Optional
-            order_id: orderData.id, // Razorpay Order ID from backend
-            handler: async (response) => {
-                await updatePaymentStatus(response, orderData);
-                alert("Payment successful!");
-                clearCart();
-            },
-            prefill: {
-                name: shippingAddress.name,
-                email: "customer-email@example.com", // Fetch email dynamically
-                contact: "9999999999" // Fetch contact dynamically
-            },
-            theme: {
-                color: "#61dafb",
-            },
-        };
-
-        const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
-    };
-
-    const updatePaymentStatus = async (paymentResponse, orderData) => {
-        const token = localStorage.getItem('token');
-        try {
-            const response = await fetch(`http://localhost:8000/api/orders/${orderData.order._id}/payment`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    paymentId: paymentResponse.razorpay_payment_id,
-                    orderId: orderData.order._id,
-                    status: 'paid',
-                }),
-            });
-
-            if (response.ok) {
-                console.log('Payment status updated in the database');
-            } else {
-                const data = await response.json();
-                console.error('Failed to update payment status', data);
-            }
-        } catch (error) {
-            console.error('Error updating payment status:', error);
-        }
-    };
 
     const handleCheckout = async () => {
         const token = localStorage.getItem('token');
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        // send cart itenm detail on backend ,
+        // at the backend get design id , frame size, frame color, shipping details, quantity, and send response for total payment 
 
         let finalShippingAddress = shippingAddress;
 
         if (!finalShippingAddress.name) {
             try {
-                const addressResponse = await fetch('http://localhost:8000/api/address/get-address', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                const addressResponse = await fetch('http://localhost:8000/api/address/get-address',// accessing addders and address infor handel in handel addredss submit function 
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
 
                 if (addressResponse.ok) {
                     const { savedAddress } = await addressResponse.json();
@@ -163,12 +91,16 @@ const Cart = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8000/api/orders/checkout', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/orders/checkout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
+
+                // send cart itenm detail on backend ,
+                // at the backend get design id , frame size, frame color, shipping details, quantity, and send response for total payment 
+
                 body: JSON.stringify({
                     items: cartItems,
                     shippingAddress: finalShippingAddress,
@@ -176,10 +108,19 @@ const Cart = () => {
                 })
             });
 
+
+
             const orderData = await response.json();
             if (response.ok) {
-                console.log('Checkout successful', orderData);
-                handlePayment(orderData);
+                console.log('Checkout successful', orderData.order);
+                const data = handlePayment(orderData.order);
+                console.log(data);
+                if (data) {
+                    // Clear the cart here
+                    clearCart();
+                    console.log('Cart cleared');
+                }
+
             } else {
                 console.error('Error creating order');
             }
