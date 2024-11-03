@@ -27,7 +27,7 @@ const DesignerStore = () => {
     useEffect(() => {
         const fetchDesignerData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/designer/designer-store/${id}`);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/designer/designer-store/${id}`);
                 const designer = response.data.designer;
 
                 const images = response.data.product.map(item => ({
