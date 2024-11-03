@@ -49,6 +49,7 @@ const Menu = () => {
                             <li className="hover:bg-gray-200"><Link to="/login">Login/Sign Up</Link></li>
                             <li className="hover:bg-gray-200"><Link to="/order-history">Order History</Link></li>
                             <li className="hover:bg-gray-200"><Link to="/wishlist">Wishlist</Link></li>
+                            <li className="hover:bg-gray-200"><Link to="/downloads">Downloads</Link></li>
                             <li className="hover:bg-gray-200"><Link to="/profile-settings">Profile Settings</Link></li>
                         </ul>
                     )}
