@@ -65,7 +65,7 @@ const CustomerProductForm = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8000/api/customframing/coustom-framing', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/customframing/coustom-framing`, {
                 method: 'POST',
                 body: formData,
             });

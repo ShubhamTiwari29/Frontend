@@ -36,7 +36,7 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
         const token = localStorage.getItem('token');
         try {
             if (isInWishlist) {
-                await fetch(`http://localhost:8000/api/coustmer/wishlist/${item._id}`, {
+                await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/coustmer/wishlist/${item._id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
                 });
                 setWishlist(wishlist.filter(wishItem => wishItem._id !== item._id));
             } else {
-                await fetch('http://localhost:8000/api/coustmer/wishlist', {
+                await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/coustmer/wishlist`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await fetch(`http://localhost:8000/api/designer/designs/view/${item._id}`, {
+            await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/designer/designs/view/${item._id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
