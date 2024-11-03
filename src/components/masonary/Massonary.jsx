@@ -80,6 +80,7 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
             ref={ref}
             className="relative group border rounded-lg overflow-hidden shadow-lg cursor-pointer transition-all duration-300 ease-in-out hover:shadow-xl mb-6"
             onClick={handleClick}
+            onTouchStart={handleClick}
             style={{ zIndex: 10 }}
         >
             <img
@@ -88,7 +89,7 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
                 className="w-full h-auto object-cover transition-transform duration-300 ease-in-out transform group-hover:scale-105"
             />
             <div className="absolute top-4 right-4 z-20">
-                <button onClick={toggleWishlist} className="focus:outline-none">
+                <button onClick={toggleWishlist} onTouchStart={toggleWishlist} className="focus:outline-none">
                     {isInWishlist ? (
                         <AiFillHeart className="text-red-500" size={24} />
                     ) : (
@@ -112,7 +113,8 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
                         <p className="text-sm text-red-300 line-through">₹{item.price}</p>
                     </div>
                     <button
-                        onClick={(e) => { e.stopPropagation(); handleClick(); }}
+                        onClick={(e) => { e.stopPropagation(); handleClick() }}
+                        onTouchStart={handleClick}
                         className=" text-black px-4 py-2 rounded "
                     >
                         <MdShoppingCartCheckout />
