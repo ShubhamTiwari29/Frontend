@@ -118,7 +118,7 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
                         <p className="text-sm text-red-300 line-through">₹{item.price}</p>
                     </div>
                     <button
-                        onClick={handleClick}
+                        onClick={handleClick} onTouchStart={handleClick}
                         className=" text-black px-4 py-2 rounded ">
                         <MdShoppingCartCheckout />
                     </button>
