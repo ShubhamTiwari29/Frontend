@@ -61,7 +61,7 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
     };
 
     const handleClick = async () => {
-        alert("clicked")
+
         try {
             await fetch(`http://localhost:8000/api/designer/designs/view/${item._id}`, {
                 method: 'PATCH',
