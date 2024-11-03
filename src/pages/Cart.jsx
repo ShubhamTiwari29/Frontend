@@ -37,7 +37,7 @@ const Cart = () => {
             return;
         }
         try {
-            const response = await fetch('http://localhost:8000/api/address/save-address', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/address/save-address`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ const Cart = () => {
 
         if (!finalShippingAddress.name) {
             try {
-                const addressResponse = await fetch('http://localhost:8000/api/address/get-address',// accessing addders and address infor handel in handel addredss submit function 
+                const addressResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/address/get-address`,// accessing addders and address infor handel in handel addredss submit function 
                     {
                         method: 'GET',
                         headers: {

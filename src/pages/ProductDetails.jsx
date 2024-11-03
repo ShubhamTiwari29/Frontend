@@ -153,7 +153,7 @@ const ProductDetails = (props) => {
                 const token = localStorage.getItem('token'); // Assuming the JWT token is stored in localStorage
 
                 const response = await axios.post(
-                    'http://localhost:8000/api/coustmer/Image-billing',
+                    `${import.meta.env.VITE_BACKEND_URL}/api/coustmer/Image-billing`,
                     {
                         ...billingInfo,
                         designId: product._id, // Pass product ID for payment processing

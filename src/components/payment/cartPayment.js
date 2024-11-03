@@ -39,13 +39,12 @@ const createOrderOnRazorPay = async (receipt, amount, currency) => {
 };
 
 export const handlePayment = async (orderDetails) => {
-    console.log("Processing payment for order:", orderDetails);
+
     const amount = orderDetails.totalPrice;
 
     // Create order on Razorpay and get the order details
     const razorpayData = await createOrderOnRazorPay(orderDetails._id, amount, "INR");
 
-    console.log("razorpay data", razorpayData);
 
 
 
@@ -61,7 +60,7 @@ export const handlePayment = async (orderDetails) => {
     }
 
     const options = {
-        key: "rzp_test_Q2Nu73kBCORtIp", // Replace with your Razorpay Key ID
+        key: `${import.meta.env.VITE_RAZORPAY_KEY_ID}`, // Replace with your Razorpay Key ID
         amount: amount * 100, // Amount in paise
         currency: "INR",
         name: "Laykamp",
@@ -71,7 +70,7 @@ export const handlePayment = async (orderDetails) => {
         handler: async (response) => {
             // Send payment details to the backend for verification
             const paymentVerificationResponse = await verifyPayment(response, orderDetails._id);
-            console.log("payment verificatiob res", paymentVerificationResponse, razorpayData);
+            // console.log("payment verificatiob res", paymentVerificationResponse, razorpayData);
 
 
             // Conditionally update payment status based on the purpose
@@ -85,7 +84,7 @@ export const handlePayment = async (orderDetails) => {
 
             alert("Payment successful!");
             return { success: true }
-            clearCart(); // Clear cart if payment is successful
+
         },
         prefill: {
             name: orderDetails?.shippingAddress?.name,
@@ -119,10 +118,10 @@ const verifyPayment = async (response, orderId) => {
 
         console.log("Verification response:", verificationResponse);
         if (verificationResponse.data.success) {
-            alert("Payment verified successfully! frontend");
+            // alert("Payment verified successfully! frontend");
             return verificationResponse.data.success;
         } else {
-            alert("Payment verification failed. frontend");
+            // alert("Payment verification failed. frontend");
             return verificationResponse.data.success;
         }
     } catch (error) {
