@@ -26,7 +26,7 @@ import DesignerStore from './pages/designer/DesignerStore';
 import Wishlist from './pages/order/Wishlist';
 import { AuthContext, AuthProvider } from './components/Context/AuthContext';
 import ScrollToTop from './components/scroll/ScrollToTop';
-import DownloadImage from './pages/DownloadImage';
+// import DownloadImage from '';
 
 
 
@@ -59,7 +59,7 @@ const AppRoutes = () => {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/order-history" element={<OrderHistory />} />
                 <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/downloads" element={<DownloadImage />} />
+                {/* <Route path="/downloads" element={<DownloadImage />} /> */}
 
                 <Route path="/cart" element={<Cart />} />
                 {/* <Route path="/verify-otp" element={<VerifyOTP />} /> */}
