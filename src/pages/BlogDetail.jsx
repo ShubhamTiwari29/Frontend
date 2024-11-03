@@ -16,7 +16,7 @@ const BlogDetail = () => {
     useEffect(() => {
         const fetchBlogData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/blogs/${id}`);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/blogs/${id}`);
                 setBlog(response.data);
                 setLoading(false);
             } catch (err) {
@@ -32,7 +32,7 @@ const BlogDetail = () => {
                     headers: { Authorization: `Bearer ${token}` }
                 } : {};
 
-                const response = await axios.get(`http://localhost:8000/api/products/related/${id}`, config);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/related/${id}`, config);
                 setRelatedProducts(response.data.relatedProducts);
                 setRelatedBlogs(response.data.relatedBlogs);
             } catch (err) {
@@ -90,7 +90,7 @@ const BlogDetail = () => {
                         <div className="bg-white text-black rounded-lg shadow-lg p-6 mb-6">
                             <h1 className="text-4xl font-bold mb-4 text-center">{blog.title}</h1>
                             <div className="flex items-center justify-center text-gray-600 space-x-2 mb-4">
-                                <p className=''>By {blog.author.firstName} {blog.author.lastName}</p>
+                                <p className=''>By {blog?.author?.firstName} {blog?.author?.lastName}</p>
                                 <span> | </span>
                                 <p>{new Date(blog.createdAt).toLocaleDateString()}</p>
                                 <span> | </span>
