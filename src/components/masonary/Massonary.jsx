@@ -2,6 +2,8 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import { MdShoppingCartCheckout } from "react-icons/md";
+
 
 const MassonaryComponent = forwardRef(({ item }, ref) => {
     const navigate = useNavigate();
@@ -110,12 +112,16 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
 
             <div className="p-3 bg-white bg-opacity-80 text-black md:hidden">
                 <h3 className="text-lg font-semibold">{item.title}</h3>
-                <div className="flex flex-row space-x-4 mt-1">
-
-                    <p className="text-sm">Price: ₹{item.sellingPrice}</p>
-                    <p className="text-sm text-red-300 line-through"> ₹{item.price}</p>
-                </div>
-                <div className="flex items-center justify-between mt-2">
+                <div className="flex justify-between items-center mt-2">
+                    <div className="flex flex-row space-x-4">
+                        <p className="text-sm">Price: ₹{item.sellingPrice}</p>
+                        <p className="text-sm text-red-300 line-through">₹{item.price}</p>
+                    </div>
+                    <button
+                        onClick={handleClick}
+                        className=" text-black px-4 py-2 rounded ">
+                        <MdShoppingCartCheckout />
+                    </button>
                 </div>
             </div>
         </div>
