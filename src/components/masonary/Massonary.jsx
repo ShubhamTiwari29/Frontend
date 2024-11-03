@@ -4,16 +4,11 @@ import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { MdShoppingCartCheckout } from "react-icons/md";
 
-
 const MassonaryComponent = forwardRef(({ item }, ref) => {
     const navigate = useNavigate();
     const [wishlist, setWishlist] = useState([]);
     const [isInWishlist, setIsInWishlist] = useState(false);
 
-    console.log(item);
-
-
-    // Fetch the wishlist when the component loads
     useEffect(() => {
         const fetchWishlist = async () => {
             const token = localStorage.getItem('token');
@@ -35,9 +30,8 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
         fetchWishlist();
     }, [item._id]);
 
-    // Function to handle adding/removing item from wishlist
     const toggleWishlist = async (e) => {
-        e.stopPropagation(); // To prevent triggering the image click event
+        e.stopPropagation();
         const token = localStorage.getItem('token');
         try {
             if (isInWishlist) {
@@ -66,7 +60,6 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
         }
     };
 
-    // Function to handle incrementing views and navigation
     const handleClick = async () => {
         try {
             await fetch(`http://localhost:8000/api/designer/designs/view/${item._id}`, {
@@ -75,7 +68,6 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
                     'Content-Type': 'application/json',
                 },
             });
-            // After increasing view count, navigate to the item's detailed page
             navigate(`/shop/${item._id}`);
         } catch (error) {
             console.error('Error increasing view count:', error);
@@ -84,16 +76,17 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
 
     return (
         <div
-            ref={ref} // Attach ref here for Masonry
+            ref={ref}
             className="relative group border rounded-lg overflow-hidden shadow-lg cursor-pointer transition-all duration-300 ease-in-out hover:shadow-xl mb-6"
             onClick={handleClick}
+            style={{ zIndex: 10 }}
         >
             <img
                 src={item.image}
                 alt={item.title}
                 className="w-full h-auto object-cover transition-transform duration-300 ease-in-out transform group-hover:scale-105"
             />
-            <div className="absolute top-4 right-4 z-10">
+            <div className="absolute top-4 right-4 z-20">
                 <button onClick={toggleWishlist} className="focus:outline-none">
                     {isInWishlist ? (
                         <AiFillHeart className="text-red-500" size={24} />
@@ -118,8 +111,9 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
                         <p className="text-sm text-red-300 line-through">₹{item.price}</p>
                     </div>
                     <button
-                        onClick={handleClick} onTouchStart={handleClick}
-                        className=" text-black px-4 py-2 rounded ">
+                        onClick={(e) => { e.stopPropagation(); handleClick(); }}
+                        className=" text-black px-4 py-2 rounded "
+                    >
                         <MdShoppingCartCheckout />
                     </button>
                 </div>
