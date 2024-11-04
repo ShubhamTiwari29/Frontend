@@ -11,7 +11,14 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
 
     useEffect(() => {
         const fetchWishlist = async () => {
+
+
             const token = localStorage.getItem('token');
+            if (!token) return;
+
+
+
+
             try {
                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/coustmer/wishlist`, {
                     method: 'GET',
@@ -27,13 +34,18 @@ const MassonaryComponent = forwardRef(({ item }, ref) => {
                 console.error('Error fetching wishlist:', error);
             }
         };
+
         fetchWishlist();
+
     }, [item._id]);
 
     const toggleWishlist = async (e) => {
         e.stopPropagation();
         e.preventDefault();
+
+
         const token = localStorage.getItem('token');
+        if (!token) return;
         try {
             if (isInWishlist) {
                 await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/coustmer/wishlist/${item._id}`, {

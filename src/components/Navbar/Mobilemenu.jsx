@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaList, FaPlus, FaUser, FaArtstation, FaCartPlus } from 'react-icons/fa';
+import { FaHome } from "react-icons/fa";
+import { GrGallery } from "react-icons/gr";
+import { AiFillRead } from "react-icons/ai";
+
+import { GiWoodFrame } from "react-icons/gi";
+
 
 const Mobilemenu = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -50,8 +56,8 @@ const Mobilemenu = () => {
                         <Link
                             to="/"
                             className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-200"
-                        >
-                            <FaArtstation className="mr-2" /> Home
+                        ><FaHome className="mr-2" />
+                            Home
                         </Link>
                     </li>
                     <li className="border-b border-gray-200">
@@ -59,7 +65,7 @@ const Mobilemenu = () => {
                             to="/custom-framing"
                             className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-200"
                         >
-                            <FaCartPlus className="mr-2" /> Custom Framing
+                            <GiWoodFrame className="mr-2" /> Custom Framing
                         </Link>
                     </li>
                     <li className="border-b border-gray-200">
@@ -67,7 +73,7 @@ const Mobilemenu = () => {
                             to="/art-gallery"
                             className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-200"
                         >
-                            <FaArtstation className="mr-2" /> Art Gallery
+                            <GrGallery className="mr-2" /> Art Gallery
                         </Link>
                     </li>
                     <li className="border-b border-gray-200">
@@ -75,7 +81,7 @@ const Mobilemenu = () => {
                             to="/blog"
                             className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-200"
                         >
-                            <FaArtstation className="mr-2" /> Blog
+                            <AiFillRead className="mr-2" /> Blog
                         </Link>
                     </li>
                     <li className="border-b border-gray-200">

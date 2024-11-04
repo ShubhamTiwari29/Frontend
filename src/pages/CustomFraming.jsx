@@ -29,11 +29,15 @@ const CustomFraming = () => {
                     backgroundImage: `url(${img1})`,
                 }}
             >
-                <div className="absolute inset-0 bg-black opacity-50"></div>
-                <div className="relative text-center text-white">
+
+                <div className="absolute inset-0 bg-black opacity-80"></div>
+
+
+                <div className="relative text-center text-white p-4">
                     <h1 className="text-3xl md:text-5xl font-bold">Convert Images Into Displays</h1>
                     <p className="mt-4 text-sm md:text-lg">Convert your images into beautiful framed displays.</p>
-                    <button className="mt-6 px-6 py-3 bg-yellow-500 rounded-full text-black font-bold md:font-semibold hover:bg-yellow-600"
+                    <button
+                        className="mt-6 px-6 py-3 bg-yellow-500 rounded-full text-black font-bold md:font-semibold hover:bg-yellow-600"
                         onClick={scrollToForm}
                     >
                         Upload Picture
