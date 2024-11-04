@@ -6,7 +6,7 @@ import { FaCamera } from "react-icons/fa";
 import { MdOutlineCollections } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import Button from '../components/Button/Button';
-import FAQ from '../components/faq/Faq';
+import FAQ from '../components/faq/FAQ';
 
 const Home = () => {
   const { topViewedProducts } = useContext(ShopContext);
