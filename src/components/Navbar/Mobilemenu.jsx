@@ -49,6 +49,7 @@ const Mobilemenu = () => {
             <button
                 onClick={toggleMenu}
                 className="p-2 border rounded-md bg-gray-200 hover:bg-gray-300 text-[#701728] focus:outline-none focus:ring-2 focus:ring-[#701728]"
+                aria-label="Mobile Menu"
             >
                 <FaList />
             </button>

@@ -41,6 +41,7 @@ const Home = () => {
             onClick={handleSearchSubmit}
             className=" h-10 px-6 flex items-center justify-center rounded-r-lg rounded-l-none bg-[#701728] hover:bg-[#4c101b] text-white" // Add your styles here
             style={{ height: '40px' }} // Ensure button height matches the input
+            aria-label="Photo Framing Image Search"
           >
             <FaSearch />
           </button>
@@ -79,7 +80,7 @@ const Home = () => {
                 <h3 className="text-lg font-bold mt-2">{image.title}</h3>
                 <div className="flex flex-row justify-center space-x-4">
                   <p className="text-sm">Price: ₹{image.sellingPrice}</p>
-                  <p className="text-sm text-red-300 line-through">₹{image.price}</p>
+                  <p className="text-sm text-red-500 line-through">₹{image.price}</p>
                 </div>
                 <button
                   className="mt-2 bg-[#701728] hover:bg-[#4c101b] text-white font-bold py-2 px-4 rounded transition duration-300"
