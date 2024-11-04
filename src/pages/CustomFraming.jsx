@@ -2,6 +2,8 @@ import React, { useRef, useEffect } from 'react';
 import CostumerProductForm from '../components/CostumerProductForm/CostumerProductForm';
 import img1 from '../assets/Images/banner.jpg';
 import { useLocation } from 'react-router-dom';
+import Button from '../components/Button/Button';
+import { AiOutlineUpload } from "react-icons/ai";
 
 const CustomFraming = () => {
     const formRef = useRef(null); // Step 1: Create a ref for the form
@@ -30,18 +32,23 @@ const CustomFraming = () => {
                 }}
             >
 
-                <div className="absolute inset-0 bg-black opacity-80"></div>
+                <div className="absolute inset-0 bg-black opacity-65"></div>
 
 
                 <div className="relative text-center text-white p-4">
                     <h1 className="text-3xl md:text-5xl font-bold">Convert Images Into Displays</h1>
                     <p className="mt-4 text-sm md:text-lg">Convert your images into beautiful framed displays.</p>
-                    <button
+                    <div className="mt-6 flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+                        <Button onClick={scrollToForm} icon={<AiOutlineUpload />} >
+                            Upload Picture
+                        </Button>
+                    </div>
+                    {/* <button
                         className="mt-6 px-6 py-3 bg-yellow-500 rounded-full text-black font-bold md:font-semibold hover:bg-yellow-600"
                         onClick={scrollToForm}
                     >
                         Upload Picture
-                    </button>
+                    </button> */}
                 </div>
             </div>
 

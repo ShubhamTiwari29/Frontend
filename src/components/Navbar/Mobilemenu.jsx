@@ -42,7 +42,7 @@ const Mobilemenu = () => {
         <div ref={menuRef} className="relative">
             <button
                 onClick={toggleMenu}
-                className="p-2 border rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="p-2 border rounded-md bg-gray-200 hover:bg-gray-300 text-[#701728] focus:outline-none focus:ring-2 focus:ring-[#701728]"
             >
                 <FaList />
             </button>

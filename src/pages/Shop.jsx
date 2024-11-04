@@ -5,6 +5,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import MassonaryComponent from '../components/masonary/Massonary';
 import Loading from '../components/loader/Loading';
 import { ShopContext } from '../components/Context/ShopContext';
+import { Result } from 'postcss';
 
 const Shop = (props) => {
     const { products, loading, error, hasMore, loadMoreProducts } = useContext(ShopContext);
@@ -29,6 +30,8 @@ const Shop = (props) => {
 
             return matchesQuery && matchesOrientation;
         });
+
+
 
         setFilteredProducts(results);
     };
@@ -120,17 +123,25 @@ const Shop = (props) => {
                     className="flex animate-slide-fade -ml-4"
                     columnClassName="pl-4 bg-clip-padding"
                 >
-                    {filteredProducts.map((item, i) => (
-                        <MassonaryComponent
-                            key={i}
-                            item={item}
-                            title={item.title}
-                            ref={i === filteredProducts.length - 1 ? lastProductRef : null}  // Attach ref to the last item
-                        />
-                    ))}
+                    {filteredProducts.length > 0 ? (
+                        filteredProducts.map((item, i) => (
+                            <MassonaryComponent
+                                key={i}
+                                item={item}
+                                title={item.title}
+                                ref={i === filteredProducts.length - 1 ? lastProductRef : null} // Attach ref to the last item
+                            />
+                        ))
+                    ) : (
+                        <div className="text-center py-8">
+                            <h2 className="text-lg font-bold">No designs matched your search.</h2>
+                            <p className="text-gray-500">Please try different keywords or filters.</p>
+                        </div>
+                    )}
+
                 </Masonry>
 
-                {/* Optional: A loading spinner during infinite scroll */}
+
                 {loading && <Loading />}
             </div>
         </div>
