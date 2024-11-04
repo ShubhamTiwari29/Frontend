@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import img1 from '../assets/Images/BannerHome.jpg';
+import img1 from '../assets/Images/BannerHome.webp';
 import { useNavigate } from 'react-router-dom';
 import { ShopContext } from '../components/Context/ShopContext';
 import { FaCamera } from "react-icons/fa";

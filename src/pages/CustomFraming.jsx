@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import CostumerProductForm from '../components/CostumerProductForm/CostumerProductForm';
-import img1 from '../assets/Images/banner.jpg';
+import img1 from '../assets/Images/banner.webp';
 import { useLocation } from 'react-router-dom';
 import Button from '../components/Button/Button';
 import { AiOutlineUpload } from "react-icons/ai";
