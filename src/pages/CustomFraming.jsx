@@ -38,7 +38,7 @@ const CustomFraming = () => {
                 <div className="relative text-center text-white p-4">
                     <h1 className="text-3xl md:text-5xl font-bold">Convert Images Into Displays</h1>
                     <p className="mt-4 text-sm md:text-lg">Convert your images into beautiful framed displays.</p>
-                    <div className="mt-6 flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+                    <div className="mt-6 flex flex-col md:flex-row justify-center  space-y-4 md:space-y-0 md:space-x-4">
                         <Button onClick={scrollToForm} icon={<AiOutlineUpload />} >
                             Upload Picture
                         </Button>

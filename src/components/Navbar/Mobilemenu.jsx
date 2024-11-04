@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { FaList, FaPlus, FaUser, FaArtstation, FaCartPlus } from 'react-icons/fa';
+import { Link, useLocation } from 'react-router-dom';
+import { FaList, FaPlus, FaUser, FaCartPlus } from 'react-icons/fa';
 import { FaHome } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
 import { AiFillRead } from "react-icons/ai";
-
 import { GiWoodFrame } from "react-icons/gi";
-
 
 const Mobilemenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [subMenuOpen, setSubMenuOpen] = useState({});
     const menuRef = useRef(null);
+    const location = useLocation(); // Add this line
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -31,12 +30,19 @@ const Mobilemenu = () => {
         }
     };
 
+    // Close menu on click outside
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    // Close menu on route change
+    useEffect(() => {
+        setIsOpen(false);
+        setSubMenuOpen({});
+    }, [location]); // Add location as a dependency
 
     return (
         <div ref={menuRef} className="relative">
