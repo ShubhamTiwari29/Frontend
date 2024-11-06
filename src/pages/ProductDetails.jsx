@@ -8,6 +8,7 @@ import axios from 'axios';
 import SizeDropdown from '../components/ProductDetails/SizeDropdown';
 import MassonaryComponent from '../components/masonary/Massonary';
 import { handlePayment } from '../components/payment/cartPayment';
+import LoginModal from '../components/loginModal/LoginModal';
 
 const ProductDetails = (props) => {
     const { products } = useContext(ShopContext);
@@ -22,6 +23,7 @@ const ProductDetails = (props) => {
         pricePerSquareInch: 0,
     });
     const [isZoomed, setIsZoomed] = useState(false);
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
     const [frames, setFrames] = useState([]);
     const [selectedOption, setSelectedOption] = useState('download'); // "download" or "framed"
@@ -147,53 +149,60 @@ const ProductDetails = (props) => {
 
     // Simulate payment process and fetch download link from backend
     const handleBillingPayment = async () => {
-        if (validateBillingInfo()) {
-            setIsProcessingPayment(true); // Show spinner
-            try {
-                const token = localStorage.getItem('token'); // Assuming the JWT token is stored in localStorage
 
-                const response = await axios.post(
-                    `${import.meta.env.VITE_BACKEND_URL}/api/coustmer/Image-billing`,
-                    {
-                        ...billingInfo,
-                        designId: product._id, // Pass product ID for payment processing
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
-                        },
-                    }
-                );
+        const token = localStorage.getItem('token'); // Assuming the JWT token is stored in localStorage
 
-
-
-                if (response.data.success) {
-                    console.log("data check", response.data);
-
-                    const { order } = response.data;
-
-                    console.log("Order details:", order);
-
-                    // Step 2: Pass order details to handlePayment function
-                    const billingStatus = await handlePayment(order);
-                    console.log(billingStatus);
-
-
-                    setIsPaymentSuccessful(true);
-
-
-                } else {
-                    alert('Payment failed. Please try again.');
-                }
-
-            } catch (error) {
-                alert('Error processing payment. Please try again later.');
-                console.error(error);
-            } finally {
-                setIsProcessingPayment(false); // Hide spinner
-            }
+        if (!token) {
+            setIsLoginModalOpen(true);
         } else {
-            alert("Please fill in all required billing details.");
+            if (validateBillingInfo()) {
+                setIsProcessingPayment(true); // Show spinner
+                try {
+                    const token = localStorage.getItem('token'); // Assuming the JWT token is stored in localStorage
+
+                    const response = await axios.post(
+                        `${import.meta.env.VITE_BACKEND_URL}/api/coustmer/Image-billing`,
+                        {
+                            ...billingInfo,
+                            designId: product._id, // Pass product ID for payment processing
+                        },
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`, // Set the Authorization header with the Bearer token
+                            },
+                        }
+                    );
+
+
+
+                    if (response.data.success) {
+                        console.log("data check", response.data);
+
+                        const { order } = response.data;
+
+                        console.log("Order details:", order);
+
+                        // Step 2: Pass order details to handlePayment function
+                        const billingStatus = await handlePayment(order);
+                        console.log(billingStatus);
+
+
+                        setIsPaymentSuccessful(true);
+
+
+                    } else {
+                        alert('Payment failed. Please try again.');
+                    }
+
+                } catch (error) {
+                    alert('Error processing payment. Please try again later.');
+                    console.error(error);
+                } finally {
+                    setIsProcessingPayment(false); // Hide spinner
+                }
+            } else {
+                alert("Please fill in all required billing details.");
+            }
         }
     };
 
@@ -371,6 +380,8 @@ const ProductDetails = (props) => {
                                 >
                                     {isProcessingPayment ? 'Processing...' : 'Make Payment'}
                                 </button>
+
+                                <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
 
                                 {/* Show Download Button After Payment */}
                                 {isPaymentSuccessful && downloadUrl && (
