@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaList, FaPlus, FaUser, FaCartPlus } from 'react-icons/fa';
 import { FaHome } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
@@ -7,14 +7,27 @@ import { AiFillRead } from "react-icons/ai";
 import { GiWoodFrame } from "react-icons/gi";
 
 const Mobilemenu = () => {
+
+
+    const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false);
     const [subMenuOpen, setSubMenuOpen] = useState({});
     const menuRef = useRef(null);
     const location = useLocation(); // Add this line
 
+
+
+    // Logout function to remove token and redirect
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // Remove token from local storage
+        navigate('/'); // Redirect to login page
+        window.location.reload(); // Refresh the page to reset state
+    };
+
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
+
 
     const toggleSubMenu = (menu) => {
         setSubMenuOpen((prevState) => ({
@@ -151,6 +164,12 @@ const Mobilemenu = () => {
                                     >
                                         Profile Settings
                                     </Link>
+                                </li>
+
+                                <li className="border-b border-gray-200">
+                                    <button onClick={handleLogout} className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100 transition-colors duration-200 w-full text-left">
+                                        Logout
+                                    </button>
                                 </li>
                             </ul>
                         )}

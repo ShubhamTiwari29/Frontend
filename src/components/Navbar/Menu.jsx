@@ -5,6 +5,13 @@ const Menu = () => {
     const [dropdown, setDropdown] = useState(null);
     const location = useLocation(); // Get the current location
 
+    // Logout function to remove token and redirect
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // Remove token from local storage
+        navigate('/'); // Redirect to login page
+        window.location.reload(); // Refresh the page to reset state
+    };
+
     const handleMouseEnter = (menu) => {
         setDropdown(menu);
     };
@@ -50,7 +57,13 @@ const Menu = () => {
                             <li className="hover:bg-gray-200"><Link to="/order-history">Order History</Link></li>
                             <li className="hover:bg-gray-200"><Link to="/wishlist">Wishlist</Link></li>
                             <li className="hover:bg-gray-200"><Link to="/downloads">Downloads</Link></li>
+
                             <li className="hover:bg-gray-200"><Link to="/profile-settings">Profile Settings</Link></li>
+                            <li>
+                                <button onClick={handleLogout} className="hover:text-red-400">
+                                    Logout
+                                </button>
+                            </li>
                         </ul>
                     )}
                 </li>
